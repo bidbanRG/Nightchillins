@@ -1,0 +1,288 @@
+        
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@300&family=Titillium+Web:wght@600&display=swap');
+.menu-bar{
+  height: 2.8rem;
+  background-color:var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    top:0;
+    box-shadow: 2px 2px 3px var(--white-smoke);
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 1;
+}
+.search-logo{
+  
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.webname{
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  background-image: url('owl.jpg');
+  background-size: cover;
+  background-position: 50%;
+}
+.search-logo .search{ 
+    display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: var(--white-smoke);
+     padding: 6px;
+     margin-left: 5px;
+   width:1rem;
+    height:1rem;
+
+    border-radius: 50%;
+  position: relative;
+}
+
+.menu-icons{
+   width: 70%;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+   position: relative
+}
+.icons1{
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.icons1 :hover{
+  background-color: var(--white-smoke);
+  border-radius: 10px;
+  position: relative;
+}
+.icons1-icon{
+  padding: 0px 1.5rem;
+  margin: 0px 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  width: 1.5rem;
+  border:none;
+  position: relative;
+  
+}
+.icons1-icon-home::after{
+  background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.9rem;
+  content: 'Home';
+  font-size: 10px;
+  padding: 7px;
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  z-index:1;
+}
+.icons1-icon-marketplace::after{
+  background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.9rem;
+  content: 'Marketplace';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons1-icon-watch::after{
+  background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.9rem;
+  content: 'Watch';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons1-icon-group::after{
+  background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.9rem;
+  content: 'Groups';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons1-icon-more::after{
+  background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.9rem;
+  content: 'More';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+
+
+.icons1-icon :hover{
+  border-radius: 0px;
+}
+
+.icons2{
+  
+  display: flex;
+
+  align-items: center;
+  position: relative;
+    
+  }
+.icons2-icon{
+  padding: 0px 2px;
+  margin:0px 2px;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+     background-color: var(--white-smoke);
+     border-radius: 50%;
+     position: relative;
+}
+.icons2-icon-msg::after{
+   background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.2rem;
+  content: 'Messenger';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons2-icon-noti::after{
+   background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.2rem;
+  content: 'Notification';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons2-icon-logout::after{
+   background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.2rem;
+  content: 'Logout';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons2-icon-theme::after{
+   background: rgba(0, 0,0, 0.8);
+  position: absolute;
+  color:white;
+  top: 2.2rem;
+  content: 'Theme';
+  font-size: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  
+  height:0.6rem;
+  display: flex;
+  align-items: center;
+}
+.icons2 :hover{
+  background-color:lightgrey;
+}
+.header-phone{
+  position: fixed;
+  width:100%;
+  height:2.4rem;
+  margin:auto;
+  
+  top:1rem;
+  left:0;
+  right:0;
+  
+}
+.menu-top{
+  width:100%;
+  height:2.4rem;
+  margin:auto;
+
+  display: flex;
+  justify-content: space-around;
+}
+.menu-bottom{
+   width:100%;
+  height:2.4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.header-phone h2{
+     color:#ff4081;
+    margin: auto;
+    margin-left: 5px;
+   font-family: 'Lobster', cursive;
+   font-size: 1.5rem;
+   margin-left: 20px;
+}
+.header-icons1{
+  width:45%;
+
+   float:right; 
+  height:2.4rem;
+   display:flex;
+   align-items: center;
+   justify-content: space-around;
+  margin-top: 0px;
+}
+.phone-icons{
+  height:1.5rem;
+  width:1.5rem;
+  padding:3px 3px;
+  border-radius: 50%;
+  background-color: lightgrey;
+}
+.phone-icons-1{
+  height:1.3rem;
+  width:1.3rem;
+  color:gray;
+}

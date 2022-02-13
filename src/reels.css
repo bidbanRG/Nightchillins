@@ -1,0 +1,268 @@
+
+.back{
+    
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    background-color: rgb(0,0,0,0.2);
+    z-index:1000;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+    
+    
+}
+.reels{
+	position: fixed;
+	width: 40%;
+  height: 90vh;
+  border-radius: 20px;
+  overflow: scroll;
+  scroll-snap-type: y mandatory;
+
+
+}
+.swipe-up{
+	position: absolute;
+	width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  background-color: rgb(0,0,0,0.8);
+}
+.swipe-btn{
+	height: 40px;
+	width: 100px;
+	font-weight: bold;
+	border-radius: 10px;
+	border:3px solid lightgrey ;
+	background-color: skyblue;
+	margin-inline: auto;
+	margin-top: 5%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.swipe-up span{
+	display: flex;
+  color: lightgray;
+	font-size: 110%;
+	margin-top: 50%;
+	font-weight: bolder;
+	align-items: center;
+	justify-content: center;
+}
+.reels::-webkit-scrollbar{
+	display: none;
+	width: 0px;
+}
+.reels::-webkit-scrollbar{
+   -ms-overflow-style: none;
+   scroll-width: none;	   
+}
+.reel_parent{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  scroll-snap-align: start;
+background-color: #171717;
+
+}
+.addreels{
+   position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  scroll-snap-align: start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('reelbg.jpg');
+  background-size: cover;
+}
+.reel-send-btn{
+	outline: none;
+	position: absolute;
+	top: 400px;
+	background-color: white;
+	border: 4px solid lightgrey;
+	color: grey;
+	border-radius: 20px;
+	width: 50%;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.uploadreels{
+	background-color: white;
+	height: 50px;
+	border: 5px solid lightgrey;
+	width: 40%;
+	border-radius: 50px;
+	display: flex;
+justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 210px;
+    overflow: hidden;
+}
+.addreels h1{
+ font-size: 25px;
+   font-weight:bold;
+  color: grey;
+}
+
+.addfile{
+
+  position: absolute;
+   top: 150px;
+   
+   height: 130px;
+   width: 130px;
+   
+  opacity:0;
+}
+.adddesc{
+	width: 80%;
+	height: 40px;
+	outline: none;
+	position: relative;
+	position: absolute;
+   top: 300px;
+   font-size: 25px;
+	border: 5px solid lightgrey;
+	border-radius: 50px;
+}
+.reel{
+	height: 100%;
+  width: 100%;
+	object-fit: contain;
+ 
+	}
+
+	.auro{
+		z-index: 1;
+		top: 75vh;
+		left: 0;
+		height: 50px;
+	
+		color: white;
+		position: absolute;
+   display: flex;
+   
+   align-items: center;
+    width: 100%;
+
+
+	}
+	.auro h3{
+		font-size: 15px;
+		margin-left: 2px;
+	}
+	.avtar-content{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+    margin-right: 10px;
+    width: 35%;
+	}
+	.opiloka{
+		width: 200px;
+	}
+	.reel-description{
+		display: flex;
+		align-items: center;
+		margin-left: 0px;
+		height: 100%;
+	 margin-right: 5px;
+		width: 55%;
+		position: relative;
+		z-index: 1;
+	}
+	.reel-text{
+		width: 100%;
+		height: 80%;
+		height: fit-content;
+		overflow: hidden;
+
+		
+	}
+	.reel-description h4{
+		color: white;
+    width: 100%;
+   height: 100%;
+   margin-inline: auto;
+   font-size: 12px;
+	}
+	
+	.like-comment{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 10px;
+
+
+	}
+	.reels-icons{
+		margin-left: 3px;
+		margin-right: 3px;
+	}
+	.avtar-reel{
+       min-height: 40px;
+   min-width: 40px;
+
+   margin-right: 10px;
+   background-size: cover;
+   background-position: 50%; 
+   object-fit: contain;
+   border-radius: 50%;
+   margin-left: 5px;
+    
+	}
+.reels button{
+	position: absolute;
+	z-index: 1;
+	top: 30px;
+	left: 30px;
+   height: 30px;
+   width: 30px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+	background-color: white;
+	font-size: 30px;
+	color: grey;
+	border-radius: 50%;
+	border: 4px solid lightgrey;
+	font-weight: 700;
+	border: none;
+}
+
+@media(max-width : 800px){
+	 .reels{
+	 	position: relative;
+	 	height: 100vh;
+	 	width: 100vh;
+	 	 background-color: #171717;
+	 	 border-radius: 0px;
+	 	 bottom: 0;
+	 }
+	 .auro{
+		z-index: 1;
+		top: 85vh;
+		left: 0;
+		
+		color: white;
+		position: absolute;
+   
+    width: 100%;
+
+
+	}
+}	

@@ -1,0 +1,132 @@
+.divPost{
+    
+    position:absolute;
+    top:2.9rem;
+    left:0;
+    right:0;
+    bottom: 0;
+    background-color: rgb(0,0,0,0.2);
+    z-index:1000;
+      display: flex;
+      justify-content: center;
+    
+    
+}
+
+.divPostsize{
+   margin-top: 2px;
+    width: 450px;
+    height: 480px;
+    border-radius: 10px;
+    background-color: var(--white);
+   position: relative;
+ display: flex;
+ flex-direction: column;  
+}
+
+.divPosthead{
+   position: relative;
+    width: 100%;
+    height: 15%;
+    top:0;
+    left:0;
+    right:0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgb(0,0,0,0.2);
+}
+.divPosthead h2{
+   margin:auto;
+   margin-top: 15px;
+   position: relative;
+    font-size: 1.5rem;
+     font-family: 'Lobster', cursive;
+}
+.divPosthead button{
+   cursor: pointer;
+   margin-top: 5px;
+   margin-right: 15px;
+   height: 32px;
+   width: 32px;
+  border-radius: 50%;   
+  border: none;
+  outline: none;
+  background-color:lightgrey;
+}
+.divPosthead1{
+    display: flex;
+   
+    flex-direction: row;
+}
+.divPosthead1 h4{
+   margin-left: 10px;
+
+}
+.profile-pic2{
+    height: 40px;
+    width: 40px;
+    background-image: url('profile.png');
+    background-position: 50%;
+    background-size: cover;
+    margin-top: 15px;
+    margin-left: 15px; 
+    border-radius: 50%;
+ }
+
+ .divPostinput{
+   width: 80%;
+   height: 250px;
+   border-radius: 30px;
+   background-image:  url('postback.jpeg');
+   background-size: cover;
+   margin: auto;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  position: relative;
+  transform: translateY(-10px);
+ }
+ .divPostinput input{
+    background-color: var(--white);
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    background-color: teal;
+    transform: translateY(-50px);
+ }
+ .divPostinputbtn{
+  position: relative;
+   background-color:var(--white);
+    height: 30px;
+    width: 80px;
+   border-radius: 30px;
+  overflow: hidden;
+ }
+ .divPostinput h5{
+    margin-top: 5px;
+    margin-left: 2px;
+    color: grey;
+ }
+  .post-btn1{
+     position: relative;
+     width:90%;
+     height:9%;
+     color:white;
+     font-size:100%;
+     margin: auto;
+   
+     border-radius: 8px;
+     border:none;
+     background-color: #ff4081;
+ }
+ @media(max-width : 764px){
+     .divPostsize{
+         width:100%;
+         margin-top:40px;
+         border-top: 2px solid var(--light-gray);
+     }
+     .divPost{
+         background-color: var(--white);
+     }
+}
