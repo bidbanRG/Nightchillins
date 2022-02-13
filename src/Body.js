@@ -32,10 +32,10 @@ function Body() {
   let nWidth = parseInt(Width);
    let phoneMode = (nWidth <= 800) 
     
-          //updating dimensions according to the device 
+         
     let feed = {width:"52%",height:nHeight}
     let feedForPhone = {width :'100%',marginTop :'2rem'}
-    //let Body = {height:nHeight}
+   
   
    const {Post,Person,setPostlist,plqx178,setPerson,Loading} = useContext(UserContext);
    
