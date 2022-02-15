@@ -96,7 +96,7 @@ const onVideoSelection = (e)=>{
     }
    
    
-     alert('file must a Video')
+     alert('file must be a Video')
      setcorrect(false);
         return;
 }  
