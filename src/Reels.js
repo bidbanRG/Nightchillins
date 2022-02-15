@@ -1,4 +1,5 @@
 import React,{useRef,useEffect,useContext,useState} from 'react';
+import './App.css'
 import Ticker from 'react-ticker'
 import {db,app_storage} from './firebase';
 import {storage} from './firebase'
@@ -11,18 +12,19 @@ import './App.css'
 import {AiFillHeart} from 'react-icons/ai';
 import {FaComment} from  'react-icons/fa';
 import {MdThumbDown,MdThumbUp} from 'react-icons/md'
-
-function Reels({onClose,storynumber}){
+import {useNavigate} from 'react-router-dom';
+function Reels({storynumber}){
    const {Person,plqx178} = useContext(UserContext);
    const {setstorynumber} = useContext(UserPost);
-    console.log(storynumber);
+   
    const reelRef = useRef();
    const descriptionRef = useRef("");
    const [REELS,setREELS] = useState([]);
    const [clickREELS,setclickREELS] = useState([]);
    const [filename,setfilename] = useState('__');
    const [swipe,setswipe] = useState(true); 
-   const [correct,setcorrect] = useState(false);          
+   const [correct,setcorrect] = useState(false);
+   const [onUpload,setonUpload] = useState(false);          
     useEffect(()=>{
        const USERS_REELS = collection(db,"reels"); 
        const q = query(USERS_REELS,orderBy('when','desc'));
@@ -45,7 +47,7 @@ function Reels({onClose,storynumber}){
            ReelUrl:url  
          })
    }  
-   const upload_REEL = ()=>{
+   const upload_REEL = async ()=>{
 
           if(!correct){
              alert('Nothing is Added');
@@ -55,17 +57,20 @@ function Reels({onClose,storynumber}){
             const file = reelRef.current.files[0];
             setcorrect(true);
              const imgRef = ref(storage,`reels/${Date.now()}`);
-             uploadBytes(imgRef,file).then(()=>{
-                getDownloadURL(imgRef).then((url)=>{
-                     upload_REEL_DATA(url);
-                       }).catch((err)=>{console.log(err)});
-             }).catch((err)=>{console.log(err)}); 
-         setfilename('__');       
-        setswipe(true);
+            setonUpload(true);
+            let upload = await uploadBytes(imgRef,file);
+            let url = await getDownloadURL(imgRef);
+           upload_REEL_DATA(url);   
+         setfilename('__');
+         setonUpload(false);       
+         navigate(-1);
       
 
     }
-
+ let navigate = useNavigate();
+ const onClose = ()=>{
+    navigate(-1);
+ }
   let head = 'ADD+'
 
   const onStoryClose = ()=>{ 
@@ -83,20 +88,15 @@ const onVideoSelection = (e)=>{
            setcorrect(false);
             return;
         }
-    if(file.type.includes("mp4")){
+    if(file.type.includes("video")){
         setfilename(e.target.files[0].name);
         console.log(file.duration);
         setcorrect(true);
         return;
     }
-    else if(file.type.includes("image")){
-       setfilename(e.target.files[0].name);
-        console.log(file.duration);
-        setcorrect(true);
-        return;     
-    }
    
-     alert('file must an Image or Video')
+   
+     alert('file must a Video')
      setcorrect(false);
         return;
 }  
@@ -104,6 +104,15 @@ const onVideoSelection = (e)=>{
 
 
 
+   function Loader(){
+      return (
+         <div className = 'loading'>  
+
+                    <div className = "spin_in"><div className = 'spin'> </div>   
+
+             </div> </div>
+      )
+}
 
  if(storynumber > -1){
 
@@ -139,6 +148,7 @@ return (<div className = 'back'>
           
 
               <div className = 'reels'>
+            {onUpload && <Loader/>}  
         { swipe &&   <div className = 'swipe-up' onScroll = {()=>{setswipe(false)}}> 
               
                 <span> Swipe Up To Watch Or Continue to Add </span>

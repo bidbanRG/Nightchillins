@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useContext} from 'react'
 import {getDownloadURL,ref,uploadBytes} from "firebase/storage";
-
+import {BrowserRouter as Router,Routes,Route,useNavigate} from 'react-router-dom';
 import {db} from './firebase';
 import {collection,getDocs,addDoc,updateDoc,doc} from 'firebase/firestore';
 import {storage} from './firebase'
@@ -37,7 +37,7 @@ function Body() {
     let feedForPhone = {width :'100%',marginTop :'2rem'}
    
   
-   const {Post,Person,setPostlist,plqx178,setPerson,Loading} = useContext(UserContext);
+   const {Post,Person,setPostlist,plqx178,setPerson,Loading,getPhoto,setgetPhoto,getPost,setgetPost} = useContext(UserContext);
    
 
   
@@ -45,8 +45,7 @@ function Body() {
 
 
   
-  const [getPost,setgetPost] = useState("") 
-  const [getPhoto,setgetPhoto] = useState("");   
+  
   const dbSetPost = async()=>{
      const POST = collection(db,'posts');
      await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1});
@@ -68,17 +67,29 @@ useEffect(()=>{
         dbSetPhoto();
     }
 },[getPhoto])
-   
    const [dopost,setPost] = useState(false);
    const [addPhotoVideo,setaddPhotoVideo] = useState(false); 
    const [shorts,setshorts] = useState(false);
    const [storynumber,setstorynumber] = useState(-1);
+   let navigate = useNavigate();
+  useEffect(()=>{
+       if(storynumber >= 0) navigate('/reels');
+     },[storynumber])  
+  
    
   return(
-    <UserPost.Provider value = {{getPost,setgetPost,setaddPhotoVideo,getPhoto,setgetPhoto,setstorynumber,storynumber}} >
+    
+    <UserPost.Provider value = {{setaddPhotoVideo,getPhoto,setgetPhoto,setstorynumber,storynumber,dopost}} >
+      
         <div  className = "Body">
-             {dopost && <Createpost onClose = {()=>setPost(false)}/>}
-             {addPhotoVideo && <CreatePhotoVideo/>}
+            
+            <Routes>
+             <Route path = '/post' element = {<Createpost/>}/>
+             <Route path = '/post-photo' element = {<CreatePhotoVideo/>}/>
+             <Route path = '/reels' element = {<Reels storynumber = {storynumber}/>}/>
+           </Routes> 
+           
+              
              {shorts && <AddStories/>}
              {Loading &&  <div className = 'loading'>  
 
@@ -121,23 +132,25 @@ useEffect(()=>{
           </div>     
         
          {(!phoneMode) && <Rightside/>} 
+        
             </div>
       </UserPost.Provider>
-
+     
         ) 
     
 }
 
-function Mind({onPost,Addshorts,smallDevice}){
+function Mind({Addshorts,smallDevice}){
  
       const {Person,setPerson,Post,setPost,setLoading} = useContext(UserContext);
       const {Name,ImgUrl,id} = Person;
-     const {setaddPhotoVideo,storynumber} = useContext(UserPost);
+     const {setaddPhotoVideo,setstorynumber} = useContext(UserPost);
      const [showprofile,Setshowprofile] = useState(false);
-     const [showReels,setshowReels] = useState(false);
-     useEffect(()=>{
-       if(storynumber >= 0) setshowReels(true);
-     },[storynumber])
+    
+     let navigate = useNavigate();
+  
+   
+    
      const profileChange = (e)=>{
             const file = e.target.files[0];
             if(!file.type.includes('image')) {
@@ -156,11 +169,15 @@ function Mind({onPost,Addshorts,smallDevice}){
 
            
      }
-  
  
+   const onReelsClick = ()=>{
+       setstorynumber(-1)
+       navigate('/reels');
+
+   }
     return(
         <div className = "Mind">
-         {showReels && <Reels onClose = {()=>setshowReels(false)} storynumber = {storynumber}/>}
+        
          {showprofile && <ShowProfileOnClick onClose = {()=>Setshowprofile(false)} url = {ImgUrl}/>}
           <div className = "top">
               <div className = "profile-pic" style = {{backgroundImage:`url(${ImgUrl})`}}
@@ -170,7 +187,7 @@ function Mind({onPost,Addshorts,smallDevice}){
                         <input type = "file" onChange = {profileChange}/>
                     </div>
               </div>
-             <div className = "input" onClick = {onPost}>  
+             <div className = "input" onClick = {()=>navigate('/post')}>  
                    <h4> How's your day {Name} ?</h4> 
              </div>
              
@@ -183,12 +200,12 @@ function Mind({onPost,Addshorts,smallDevice}){
                    {!smallDevice &&  <h6>Live Video</h6>}
                    {smallDevice &&  <h6>Live</h6>} 
             </div>
-           <div className = "display" onClick = {()=>setaddPhotoVideo(true)}>  
+           <div className = "display" onClick = {()=>navigate('/post-photo')}>  
                     <FaPhotoVideo color = "green" size = "1.5rem"/> 
                       {!smallDevice  && <h6>Add Photos</h6>}
                       {smallDevice &&  <h6>Photos</h6>}
              </div>
-           <div className = "display" onClick = {()=>setshowReels(true)} >   
+           <div className = "display" onClick = {onReelsClick}>   
                    <MdVideoLibrary color = "goldenrod"  size = "1.5rem" /> 
                       {!smallDevice && <h6> Add Reels </h6>}
                       {smallDevice &&  <h6>Reels</h6>}

@@ -4,6 +4,9 @@ import Body from './Body';
 import Header from './Header';
 import {db,app_storage} from './firebase';
 import {collection,getDocs,addDoc,updateDoc,doc,query,where,onSnapshot,add,orderBy} from 'firebase/firestore';
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
+import Createpost from './Createpost';
+import CreatePhotoVideo from './CreatePhotoVideo';
 import Ticker from 'react-ticker'
 
 import Reels from './Reels'
@@ -16,7 +19,8 @@ function App() {
     const [Post,setPostlist] = useState([]);    
     const [plqx178,setUsers] = useState([]);
     const [Loading,setLoading] = useState(false);
-   
+   const [getPost,setgetPost] = useState("") 
+  const [getPhoto,setgetPhoto] = useState("");   
   
 
     const profileUpdate = async (id,url)=>{
@@ -93,15 +97,15 @@ function App() {
     
     return (
      
-            
+        <Router>    
         <div className = 'app'>  
-  
+        <Header Logout = {()=>LOG_OUT()}/>
        
-       <Header Logout = {()=>LOG_OUT()}/>
-       <Body/>  
-      
+        
+            <Body/>
      
        </div>
+       </Router>
     )
      
   }
@@ -111,7 +115,7 @@ function App() {
     
    
  
-    <UserContext.Provider value = {{Person,setPerson,islogin,setLogin,Post,plqx178,setPostlist,setUsers,setLoading,Loading}}>  
+    <UserContext.Provider value = {{getPost,setgetPost,getPhoto,setgetPhoto,Person,setPerson,islogin,setLogin,Post,plqx178,setPostlist,setUsers,setLoading,Loading}}>  
        { (!islogin) ?   <Login/> :  <Profile/> }
     </UserContext.Provider> 
     

@@ -7,7 +7,7 @@ import {UserContext,UserPost} from './UserContext'
 import { useInView,InView } from 'react-intersection-observer';
 import './reels.css'
 import './App.css'
-
+import {useNavigate} from 'react-router-dom';
 
 
 function Stories() {
@@ -21,7 +21,7 @@ function Stories() {
             onSnapshot(q,(snap)=>{
            setSTORY(snap.docs.map((doc)=>({...doc.data(), id:doc.id})))});
      },[STORY.length])
-      
+     let navigate = useNavigate(); 
    return (
       <div className="slider">        
           
@@ -60,7 +60,7 @@ function Stories() {
               
                  STORY.map((data,index)=>(
                      
-                   <Video key = {data.id} d = {data.when}  src = {data.ReelUrl} Click = {()=>setstorynumber(index)}/>
+                   <Video key = {data.id} d = {data.when}  src = {data.ReelUrl} Click = {()=>setstorynumber(index)} Show = {()=>navigate('/reels')}/>
                  ))
                
 
@@ -71,14 +71,17 @@ function Stories() {
   
    );
 }
-function Video({src,d,Click}){
+function Video({src,d,Click,Show}){
 
-   
+   const AllClickEvents = ()=>{
+        Show();
+        Click();
+   }
   
     
    return( 
     
-     <div className = 'story' onClick = {Click}>
+     <div className = 'story' onClick = {AllClickEvents}>
        <video  src={src} type="video/mp4" className = 'reel'  autoPlay loop muted> 
        </video>
     </div>   

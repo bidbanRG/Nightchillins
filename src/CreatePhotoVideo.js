@@ -5,7 +5,8 @@ import {collection,getDocs,addDoc,updateDoc,doc,query,where,deleteDoc} from 'fir
 import {getDownloadURL,ref,uploadBytes} from "firebase/storage";
 import {storage} from './firebase'
 import './divPost.css'
-function CreatePhotoVideo({onClose}){
+import {useNavigate} from 'react-router-dom';
+function CreatePhotoVideo(){
 
 
   const {setaddPhotoVideo,getPhoto,setgetPhoto} = useContext(UserPost);
@@ -13,21 +14,7 @@ function CreatePhotoVideo({onClose}){
   const {Name,ImgUrl,id} = Person;
   const photo = useRef(false);
   const [photoname,setphotoname] = useState(false);
-  // const fun = async (id)=>{
-  //   const USERS = collection(db,'posts');
-  //   const q = query(USERS, where('Userid','==', id));
-  //   const snap = await getDocs(q);
-  //   const ans = []
-  //       snap.docs.map((doc)=>(ans.push(doc.data())));
-  //        const delPost = Post.filter((doc)=>{
-  //           return doc.Type === 'image'; 
-  //       })
-  //       // const userDoc = doc(db,"posts",);
-  //       // const NewPostUrl = {Posturl:url}
-  //       // await updateDoc(userDoc,NewPostUrl)
-
-  //   }
-
+ 
     const addPhotoPost = async (url)=>{
          const USERS = collection(db,'posts');
           await addDoc(USERS,{Userid:id,Type:'image',Posturl:url,when:Post.length + 1});
@@ -69,14 +56,14 @@ function CreatePhotoVideo({onClose}){
             setphotoname(true);
 
      }
-
+ let navigate = useNavigate();
    return (
 
      <div className = "divPost"> 
         <div className = "divPostsize">
            <div className = "divPosthead"> 
              <h2> Add Photos </h2>
-             <button onClick = {()=>setaddPhotoVideo(false)}> X </button>
+             <button onClick = {()=>navigate(-1)}> X </button>
            </div>
           <div className = "divPosthead1">
                  <div className="profile-pic2" 

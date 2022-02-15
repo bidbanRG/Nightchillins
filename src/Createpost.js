@@ -2,19 +2,19 @@ import React, {useState,useRef,useContext} from 'react'
 import Axios from 'axios';
 import {UserContext,UserPost} from './UserContext'
 import "./post.css"
-
-function Createpost({onClose}) {
+import {useNavigate} from 'react-router-dom';
+function Createpost() {
     
-    const {setgetPost} = useContext(UserPost);
-   const {Person,setPerson} = useContext(UserContext);
+    
+   const {Person,setPerson,setgetPost} = useContext(UserContext);
   const {Name,ImgUrl} = Person;
  
  const text = useRef("");
-
+let navigate = useNavigate();
  const sendPost = ()=>{
     if(text.current.value.length === 0) {return;}
     setgetPost(text.current.value);
-    onClose();
+ 
  }
 
    
@@ -24,7 +24,7 @@ function Createpost({onClose}) {
             <div className="post-size">
                <header className = "head">
                  <h1> Add a Post</h1>
-                 <button onClick = {onClose}> X </button>
+                 <button onClick = {()=>navigate(-1)}> X </button>
               </header> 
                 <div className = "head1">
                  <div className="profile-pic1" 
