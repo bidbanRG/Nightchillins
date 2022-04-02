@@ -4,6 +4,7 @@
   --light-gray:lightgray;
   --thumb : lightgray;
   --black : black;
+  --text : white;
 }
 body {
   margin: 0px;

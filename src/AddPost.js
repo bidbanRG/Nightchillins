@@ -37,8 +37,8 @@ function AddPost(person){
         <div className = 'addpost' > 
          {showprofile && <ShowProfileOnClick onClose = {()=>Setshowprofile(false)} url = {ImgUrl}/>}
            { person.Type !== 'text' && showpost && <ShowProfileOnClick onClose = {()=>Setshowpost(false)} url = {Posturl}/>}
-             <header onClick = {()=>{Setshowprofile(true)}}> 
-              <div  className = "who" style = {{backgroundImage:`url(${ImgUrl})`,backgroundPosition :'center'}}></div>
+             <header> 
+              <div  className = "who" style = {{backgroundImage:`url(${ImgUrl})`,backgroundPosition :'center'}} onClick = {()=>{Setshowprofile(true)}}></div>
               <div className = "who_details">
               <h4> {Name} </h4>
                <h5 className = "date">  { getTime(person.when)} </h5>

@@ -37,6 +37,7 @@
    width: 40px;
  background-size: cover;
 border-radius: 50%;
+
 }
 .PostImage{
 	
@@ -53,11 +54,16 @@ border-radius: 50%;
 
 .who_details{
 	margin-left: 5px;
-  margin-bottom: 5px;	
+  margin-bottom: 5px;
+  color: var(--text);	
 
 }
 .who_details h4{
 	margin-top: 10px;
+	color: var(--text);
+}
+.who_details h5{
+	color: var(--text);
 }
 .date{
 	font-size: 10px;

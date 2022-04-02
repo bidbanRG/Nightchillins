@@ -37,6 +37,7 @@ function Header({Logout}) {
           document.documentElement.style.setProperty('--light-gray','#202020');
           document.documentElement.style.setProperty('--thumb','#28282B');
            document.documentElement.style.setProperty('--black','lightgray');
+            document.documentElement.style.setProperty('--text','white');
        } 
        else{
         
@@ -45,8 +46,8 @@ function Header({Logout}) {
         document.documentElement.style.setProperty('--light-gray','lightgray');
         document.documentElement.style.setProperty('--thumb','lightgray');
         document.documentElement.style.setProperty('--black','black');
-       }
-    
+       document.documentElement.style.setProperty('--text','black');
+    }
   },[isDark])
     return [isDark,()=>setTheme(!isDark)];  
 }
