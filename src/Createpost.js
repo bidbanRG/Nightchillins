@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 function Createpost() {
     
     
-   const {Person,setPerson,setgetPost} = useContext(UserContext);
+   const {Person,setPerson,setgetPost,setpostTime} = useContext(UserContext);
   const {Name,ImgUrl} = Person;
  
  const text = useRef("");
@@ -14,6 +14,7 @@ let navigate = useNavigate();
  const sendPost = ()=>{
     if(text.current.value.length === 0) {return;}
     setgetPost(text.current.value);
+    setpostTime(Date.now());
  
  }
 

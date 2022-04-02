@@ -37,10 +37,10 @@ function Body() {
     let feedForPhone = {width :'100%',marginTop :'2rem'}
    
   
-   const {Post,Person,setPostlist,plqx178,setPerson,Loading,getPhoto,setgetPhoto,getPost,setgetPost} = useContext(UserContext);
+   const {Post,Person,setPostlist,plqx178,setPerson,Loading,getPhoto,setgetPhoto,getPost,setgetPost,postTime,setpostTime} = useContext(UserContext);
    
 
-  
+     
   
 
 
@@ -48,12 +48,12 @@ function Body() {
   
   const dbSetPost = async()=>{
      const POST = collection(db,'posts');
-     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1});
+     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1,PostTime:postTime});
      setPostlist([{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1},...Post]) 
   }
  const dbSetPhoto = async()=>{
      const POST = collection(db,'posts');
-     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost});
+     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,PostTime:postTime});
      setPostlist([{Userid:Person.id,Type:'image',Like:0,Posturl:getPhoto},...Post])
  }   
 
@@ -61,12 +61,12 @@ useEffect(()=>{
   if(getPost.length > 0) {
     dbSetPost();
   }
-},[getPost])
+},[postTime])
 useEffect(()=>{
     if(getPost.length > 0){
         dbSetPhoto();
     }
-},[getPhoto])
+},[postTime])
    const [dopost,setPost] = useState(false);
    const [addPhotoVideo,setaddPhotoVideo] = useState(false); 
    const [shorts,setshorts] = useState(false);

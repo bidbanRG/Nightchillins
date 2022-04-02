@@ -41,7 +41,7 @@ function AddPost(person){
               <div  className = "who" style = {{backgroundImage:`url(${ImgUrl})`,backgroundPosition :'center'}}></div>
               <div className = "who_details">
               <h4> {Name} </h4>
-               <h5 className = "date">  { DATE[0] + " " + DATE[1] + " " + DATE[2] + " " + DATE[3] } </h5>
+               <h5 className = "date">  { !person.PostTime  ? DATE[0] + " " + DATE[1] + " " + DATE[2] + " " + DATE[3] : getTime(person.PostTime)} </h5>
               </div>
              </header>
              {   (person.Type === 'text') ?
@@ -64,5 +64,23 @@ function AddPost(person){
       )
 }
 
+const getTime = (time) => {
+    
+     let Time = (Date.now() - time) / 1000;
+     
+    const units = ['mins','hours','days'];
+    const divi = [60,60,24];
+    let unit = 'sec';
 
+   for(let i = 0; i < 3; i++){
+     if(Time / divi[i] >= 1) {
+        Time = Time / divi[i];
+        unit = units[i]; 
+      }
+      else {break;}
+   } 
+ Time = parseInt(Time);
+  return Time + " " + unit + " " + "ago"; 
+
+}
 export default AddPost;

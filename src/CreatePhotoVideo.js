@@ -10,19 +10,20 @@ function CreatePhotoVideo(){
 
 
   const {setaddPhotoVideo,getPhoto,setgetPhoto} = useContext(UserPost);
-  const {Person,setPerson,Post,setPostlist,setLoading,plqx178} = useContext(UserContext);
+  const {Person,setPerson,Post,setPostlist,setLoading,plqx178,postTime,setpostTime} = useContext(UserContext);
   const {Name,ImgUrl,id} = Person;
   const photo = useRef(false);
   const [photoname,setphotoname] = useState(false);
  
     const addPhotoPost = async (url)=>{
+         
          const USERS = collection(db,'posts');
-          await addDoc(USERS,{Userid:id,Type:'image',Posturl:url,when:Post.length + 1});
+          await addDoc(USERS,{Userid:id,Type:'image',Posturl:url,when:Post.length + 1,PostTime:postTime});
     }
     const onPhotoPost = async ()=>{
             const file = photo.current.files[0];
           
-            
+            setpostTime(Date.now());
             
             if(!file.type.includes('image')) {
                 alert("Profile Picture must be an Image")

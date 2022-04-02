@@ -21,7 +21,7 @@ function App() {
     const [Loading,setLoading] = useState(false);
    const [getPost,setgetPost] = useState("") 
   const [getPhoto,setgetPhoto] = useState("");   
-  
+  const [postTime,setpostTime] = useState();
 
     const profileUpdate = async (id,url)=>{
            const userDoc = doc(db,"users",id);
@@ -115,7 +115,7 @@ function App() {
     
    
  
-    <UserContext.Provider value = {{getPost,setgetPost,getPhoto,setgetPhoto,Person,setPerson,islogin,setLogin,Post,plqx178,setPostlist,setUsers,setLoading,Loading}}>  
+    <UserContext.Provider value = {{getPost,setgetPost,getPhoto,setgetPhoto,Person,setPerson,islogin,setLogin,Post,plqx178,setPostlist,setUsers,setLoading,Loading,setpostTime,postTime}}>  
        { (!islogin) ?   <Login/> :  <Profile/> }
     </UserContext.Provider> 
     
