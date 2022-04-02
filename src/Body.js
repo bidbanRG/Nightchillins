@@ -46,27 +46,28 @@ function Body() {
 
   
   
-  const dbSetPost = async()=>{
-     const POST = collection(db,'posts');
-     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1,PostTime:postTime});
-     setPostlist([{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1},...Post]) 
-  }
- const dbSetPhoto = async()=>{
-     const POST = collection(db,'posts');
-     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,PostTime:postTime});
-     setPostlist([{Userid:Person.id,Type:'image',Like:0,Posturl:getPhoto},...Post])
- }   
+  // const dbSetPost = async()=>{
+  //    const POST = collection(db,'posts');
+  //    await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1,PostTime:postTime});
+  //    setPostlist([{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1},...Post]) 
+  // }
+ // const dbSetPhoto = async()=>{
+ //     const POST = collection(db,'posts');
+ //     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Posturl:getPhoto,when:Date.now()});
+ //     setPostlist([{Userid:Person.id,Type:'image',Like:0,Posturl:getPhoto,when:Date.now()},...Post])
+ //  }   
 
-useEffect(()=>{
-  if(getPost.length > 0) {
-    dbSetPost();
-  }
-},[postTime])
-useEffect(()=>{
-    if(getPost.length > 0){
-        dbSetPhoto();
-    }
-},[postTime])
+// useEffect(()=>{
+//   if(getPost.length > 0) {
+//     dbSetPost();
+//   }
+// },[postTime])
+// useEffect(()=>{
+//     if(getPost.length > 0){
+//         dbSetPhoto();
+//     }
+// },[getPost])
+   
    const [dopost,setPost] = useState(false);
    const [addPhotoVideo,setaddPhotoVideo] = useState(false); 
    const [shorts,setshorts] = useState(false);
@@ -151,7 +152,8 @@ function Mind({Addshorts,smallDevice}){
   
    
     
-     const profileChange = (e)=>{
+     const profileChange = async (e)=>{
+
             const file = e.target.files[0];
             if(!file.type.includes('image')) {
                 alert("Profile Picture must be an Image")
@@ -159,14 +161,14 @@ function Mind({Addshorts,smallDevice}){
             }
               setLoading(true);
              
-             const imgRef = ref(storage,`profile-pic/${id}`);
-             uploadBytes(imgRef,file).then(()=>{
-                getDownloadURL(imgRef).then((url)=>{
-                    
-                    setPerson({...Person,ImgUrl : url});
-                }).catch((err)=>{console.log(err)});
-             }).catch((err)=>{console.log(err)}); 
-
+              const imgRef = ref(storage,`profile-pic/${id}`);
+              await  uploadBytes(imgRef,file)
+              const url =  await getDownloadURL(imgRef)
+              setPerson({...Person,ImgUrl : url});
+              const userDoc = doc(db,"users",id);
+              const NewImgUrl = {ImgUrl:url}
+              await updateDoc(userDoc,NewImgUrl);
+             setLoading(false);
            
      }
  
@@ -184,7 +186,7 @@ function Mind({Addshorts,smallDevice}){
                   onClick = {()=>Setshowprofile(true)}
               > 
                     <div className = "inp"> 
-                        <input type = "file" onChange = {profileChange}/>
+                        <input type = "file" onChange = {profileChange} onClick = {()=>Setshowprofile(false)}/>
                     </div>
               </div>
              <div className = "input" onClick = {()=>navigate('/post')}>  

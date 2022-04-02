@@ -41,7 +41,7 @@ function AddPost(person){
               <div  className = "who" style = {{backgroundImage:`url(${ImgUrl})`,backgroundPosition :'center'}}></div>
               <div className = "who_details">
               <h4> {Name} </h4>
-               <h5 className = "date">  { !person.PostTime  ? DATE[0] + " " + DATE[1] + " " + DATE[2] + " " + DATE[3] : getTime(person.PostTime)} </h5>
+               <h5 className = "date">  { getTime(person.when)} </h5>
               </div>
              </header>
              {   (person.Type === 'text') ?

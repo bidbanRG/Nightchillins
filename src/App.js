@@ -71,18 +71,18 @@ function App() {
 
    }
    
-   useEffect(()=>{
-   if(Person.id !== undefined) 
-       profileUpdate(Person.id,Person.ImgUrl);
-       setLoading(false);
-   },[Person.ImgUrl])
+   // useEffect(()=>{
+   // if(Person.id !== undefined) 
+   //     profileUpdate(Person.id,Person.ImgUrl);
+   //     setLoading(false);
+   // },[Person.ImgUrl])
   useEffect(()=>{
    getPosts(); 
-   setLoading(false);
+   console.log('fethching posts....')
  },[Post.length])
-  useEffect(()=>{
-   setLoading(false)
-  },[Post])
+  // useEffect(()=>{
+  //  setLoading(false)
+  // },[Post])
  
   useEffect(()=>{
    getUsers(); 

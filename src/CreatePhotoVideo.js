@@ -15,15 +15,11 @@ function CreatePhotoVideo(){
   const photo = useRef(false);
   const [photoname,setphotoname] = useState(false);
  
-    const addPhotoPost = async (url)=>{
-         
-         const USERS = collection(db,'posts');
-          await addDoc(USERS,{Userid:id,Type:'image',Posturl:url,when:Post.length + 1,PostTime:postTime});
-    }
+   
     const onPhotoPost = async ()=>{
             const file = photo.current.files[0];
           
-            setpostTime(Date.now());
+           
             
             if(!file.type.includes('image')) {
                 alert("Profile Picture must be an Image")
@@ -32,23 +28,31 @@ function CreatePhotoVideo(){
              
               setLoading(true);
              const imgRef = ref(storage,`profile-pic/${Date.now()}`);
-             uploadBytes(imgRef,file).then(()=>{
-                getDownloadURL(imgRef).then((url)=>{
-                      const USERS = collection(db,'posts');
+             //  uploadBytes(imgRef,file).then(()=>{
+             //    getDownloadURL(imgRef).then((url)=>{
+             //          const USERS = collection(db,'posts');
                        
                     
                         
-                        setPostlist([{Userid:id,Type:'image',Posturl:url},...Post]);
-                       addPhotoPost(url);
+             //            setPostlist([{Userid:id,Type:'image',Posturl:url,when:Date.now()},...Post]);
+             //            addPhotoPost(url);
 
                     
                     
-                }).catch((err)=>{console.log(err)});
-             }).catch((err)=>{console.log(err)}); 
-                
-              setaddPhotoVideo(false);
+             //    }).catch((err)=>{console.log(err)});
+             // }).catch((err)=>{console.log(err)}); 
+             await uploadBytes(imgRef,file);
+             const url = await getDownloadURL(imgRef);
+             
+            const POST = collection(db,'posts');
+             await addDoc(POST,{Userid:Person.id,Type:'image',Like:0,Posturl:url,when:Date.now()});
+            setPostlist([{Userid:id,Type:'image',Posturl:url,when:Date.now()},...Post]);
+                 
+                setLoading(false);
+             // setaddPhotoVideo(false);
+                navigate(-1);
      }
-     const onPhotoSelection = (e)=>{
+     const onPhotoSelection = (e)=> {
         const file = e.target.files[0];
           if(!file.type.includes('image')) {
                 alert("File must be an Image")
