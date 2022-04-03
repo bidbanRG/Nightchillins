@@ -19,9 +19,9 @@ function App() {
     const [Post,setPostlist] = useState([]);    
     const [plqx178,setUsers] = useState([]);
     const [Loading,setLoading] = useState(false);
-   const [getPost,setgetPost] = useState("") 
-  const [getPhoto,setgetPhoto] = useState("");   
-  const [postTime,setpostTime] = useState();
+    const [getPost,setgetPost] = useState("") 
+   const [getPhoto,setgetPhoto] = useState("");   
+   const [postTime,setpostTime] = useState();
 
     const profileUpdate = async (id,url)=>{
            const userDoc = doc(db,"users",id);
@@ -52,13 +52,15 @@ function App() {
               const USERS = collection(db,"users"); 
             onSnapshot(USERS,(snap)=>{
            setUsers(snap.docs.map((doc)=>({...doc.data(), id:doc.id})));
-
-           
+      
+         
    })}
    
 
     const LOG_OUT = ()=>{
       setLogin(false);
+      localStorage.removeItem('NightchilinsName');
+      localStorage.removeItem('NightchilinsPassword');
       window.location.reload(true);
       setPerson(null);
     }
@@ -78,19 +80,23 @@ function App() {
    // },[Person.ImgUrl])
   useEffect(()=>{
    getPosts(); 
-   console.log('fethching posts....')
+   
  },[Post.length])
-  // useEffect(()=>{
-  //  setLoading(false)
-  // },[Post])
+  useEffect(()=>{
+   setLoading(false)
+  },[Post])
+
+  
+  
  
   useEffect(()=>{
    getUsers(); 
     if(Person.id === undefined && Person.Name.length > 0){
         const newuser = User_exist(Person.Name,Person.Password);
            setPerson({...Person,id:newuser[0].id});
+           console.log('newuser');
        }
- },[plqx178.length])
+ },[plqx178.length]);
  
   function Profile(){
 
@@ -109,14 +115,28 @@ function App() {
     )
      
   }
-
-    
+  useEffect(()=>{
+  const inLocal = () => {
+         const Uname = localStorage.getItem('NightchilinsName'); 
+         const Upassword = localStorage.getItem('NightchilinsPassword');
+        setLogin(Upassword && Uname);
+         
+        if(Uname && Upassword && plqx178.length){ 
+         const UMser =  User_exist(Uname,Upassword); 
+         setPerson(UMser[0]);
+           
+        }
+        
+  }
+  inLocal();
+},[plqx178.length]);
+  
   return (
     
    
  
     <UserContext.Provider value = {{getPost,setgetPost,getPhoto,setgetPhoto,Person,setPerson,islogin,setLogin,Post,plqx178,setPostlist,setUsers,setLoading,Loading,setpostTime,postTime}}>  
-       { (!islogin) ?   <Login/> :  <Profile/> }
+       { (plqx178.length) ? ( !islogin ?   <Login/> :  <Profile/> ) : <div> Loading...</div> }
     </UserContext.Provider> 
     
    
@@ -142,6 +162,7 @@ function Login() {
         await addDoc(USERS,{Name: name.current.value,Password: password.current.value,
         ImgUrl:'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'
       })   
+        // window.location.reload(true); 
     }
   
     const fun = async (NAME)=>{
@@ -192,6 +213,8 @@ function Login() {
          else {
           name.current.value = name.current.value.trim()
           password.current.value = password.current.value.trim()
+          localStorage.setItem(`NightchilinsName` , name.current.value);
+          localStorage.setItem(`NightchilinsPassword` , password.current.value);
             const user = User_exist(name.current.value,password.current.value);
             if(user.length === 0) alert("User Not Found");
              else {
@@ -220,16 +243,17 @@ function Login() {
                 const New_user = User_exist(name.current.value,password.current.value);
                    
                 if(New_user.length >= 1) {
-                    alert("Change your password as it's matching with other users")
+                    alert("Password to weak");
                     return;
                 } 
           name.current.value = name.current.value.trim()
           password.current.value = password.current.value.trim()
                make_account();
     setPerson({Name:name.current.value,Password:password.current.value,ImgUrl:'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'})
-             
+    localStorage.setItem(`NightchilinsName` , name.current.value);
+    localStorage.setItem(`NightchilinsPassword` , password.current.value);      
              fun(name.current.value); 
-            
+           
               setLogin(true);
        
         

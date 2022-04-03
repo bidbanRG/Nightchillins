@@ -28,6 +28,7 @@ margin: auto;
  }
 .stories::-webkit-scrollbar{
     width:0px;
+   
 }
 
 .story-loader {
@@ -89,7 +90,7 @@ margin: auto;
 @media(min-width : 800px){
     
 .stories::-webkit-scrollbar{
-    width:20px;
+    width:0px;
     border-radius: 10px;
     
 }

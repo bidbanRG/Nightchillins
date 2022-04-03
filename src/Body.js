@@ -209,8 +209,8 @@ function Mind({Addshorts,smallDevice}){
              </div>
            <div className = "display" onClick = {onReelsClick}>   
                    <MdVideoLibrary color = "goldenrod"  size = "1.5rem" /> 
-                      {!smallDevice && <h6> Add Reels </h6>}
-                      {smallDevice &&  <h6>Reels</h6>}
+                      {!smallDevice && <h6> Add Stories </h6>}
+                      {smallDevice &&  <h6> Stories </h6>}
              </div>
           </div>  
        

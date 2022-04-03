@@ -71,7 +71,7 @@ function Leftside() {
            </div>
            <div className="left-content">
                <BsMessenger size = '1.3rem' className = 'icon' color = '#FF00FF'/>
-               <h4>Messenger</h4>    
+               <h4>Message</h4>    
             </div>
             <div className="left-content">
                 <BsFillCloudHaze2Fill size = {SIZE} className = 'icon' color = '#008B8B'/>
