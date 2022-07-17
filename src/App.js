@@ -162,7 +162,7 @@ function Login() {
         await addDoc(USERS,{Name: name.current.value,Password: password.current.value,
         ImgUrl:'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'
       })   
-        // window.location.reload(true); 
+        
     }
   
     const fun = async (NAME)=>{
