@@ -31,13 +31,13 @@ function Body() {
   let nHeight = Height + 'px';
   let nWidth = parseInt(Width);
    let phoneMode = (nWidth <= 800) 
-    
+    const [Loading,setLoading] = useState(false);
          
     let feed = {width:"52%",height:nHeight}
     let feedForPhone = {width :'100%',marginTop :'2rem'}
    
   
-   const {Post,Person,setPostlist,plqx178,setPerson,Loading,getPhoto,setgetPhoto,getPost,setgetPost,postTime,setpostTime} = useContext(UserContext);
+   const {Person,setPerson} = useContext(UserContext);
    
 
      
@@ -46,31 +46,8 @@ function Body() {
 
   
   
-  // const dbSetPost = async()=>{
-  //    const POST = collection(db,'posts');
-  //    await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1,PostTime:postTime});
-  //    setPostlist([{Userid:Person.id,Type:'text',Like:0,Text:getPost,when:Post.length + 1},...Post]) 
-  // }
- // const dbSetPhoto = async()=>{
- //     const POST = collection(db,'posts');
- //     await addDoc(POST,{Userid:Person.id,Type:'text',Like:0,Posturl:getPhoto,when:Date.now()});
- //     setPostlist([{Userid:Person.id,Type:'image',Like:0,Posturl:getPhoto,when:Date.now()},...Post])
- //  }   
 
-// useEffect(()=>{
-//   if(getPost.length > 0) {
-//     dbSetPost();
-//   }
-// },[postTime])
-// useEffect(()=>{
-//     if(getPost.length > 0){
-//         dbSetPhoto();
-//     }
-// },[getPost])
-   
-   const [dopost,setPost] = useState(false);
-   const [addPhotoVideo,setaddPhotoVideo] = useState(false); 
-   const [shorts,setshorts] = useState(false);
+
    const [storynumber,setstorynumber] = useState(-1);
    let navigate = useNavigate();
   useEffect(()=>{
@@ -80,7 +57,7 @@ function Body() {
    
   return(
     
-    <UserPost.Provider value = {{setaddPhotoVideo,getPhoto,setgetPhoto,setstorynumber,storynumber,dopost}} >
+    <UserPost.Provider value = {{setstorynumber,storynumber}}>
       
         <div  className = "Body">
             
@@ -91,12 +68,12 @@ function Body() {
            </Routes> 
            
               
-             {shorts && <AddStories/>}
+             {/*{shorts && <AddStories/>}
              {Loading &&  <div className = 'loading'>  
 
                     <div className = "spin_in"><div className = 'spin'> </div>   
 
-             </div> </div> }
+             </div> </div> }*/}
            
                 {(!phoneMode) && <Leftside/>} 
         
@@ -104,29 +81,16 @@ function Body() {
           <div style = { phoneMode ? feedForPhone : feed} className = 'feed'> 
           {  (phoneMode) ?
               <div>   
-             <Mind onPost = {()=>setPost(true)}  
-               
-                Addshorts = {()=>{setshorts(true)}}
-              
-             smallDevice = {nWidth < 400} /> 
+             <Mind smallDevice = {nWidth < 400} /> 
              <Stories/> 
               </div> : 
              <div>
              <Stories/> 
-             <Mind onPost = {()=>setPost(true)} 
-             
-
-               Addshorts = {()=>{setshorts(true)}}
-               
-             smallDevice = {nWidth < 400} /> 
+             <Mind smallDevice = {nWidth < 400} /> 
              </div>
            }
 
-              {
-                 Post.map((obj)=>{
-                   return <AddPost key = {obj.id} {...obj} />
-                 })
-              }
+             {/*  Adding Post Here */}
              
                
               
@@ -141,36 +105,18 @@ function Body() {
     
 }
 
-function Mind({Addshorts,smallDevice}){
+function Mind(smallDevice){
  
-      const {Person,setPerson,Post,setPost,setLoading} = useContext(UserContext);
-      const {Name,ImgUrl,id} = Person;
-     const {setaddPhotoVideo,setstorynumber} = useContext(UserPost);
+      const {Person,setPerson,setLoading} = useContext(UserContext);
+   
+     const {setstorynumber} = useContext(UserPost);
      const [showprofile,Setshowprofile] = useState(false);
     
      let navigate = useNavigate();
   
-   
+   const { imgUrl } = Person; 
     
-     const profileChange = async (e)=>{
-
-            const file = e.target.files[0];
-            if(!file.type.includes('image')) {
-                alert("Profile Picture must be an Image")
-                return;
-            }
-              setLoading(true);
-             
-              const imgRef = ref(storage,`profile-pic/${id}`);
-              await  uploadBytes(imgRef,file)
-              const url =  await getDownloadURL(imgRef)
-              setPerson({...Person,ImgUrl : url});
-              const userDoc = doc(db,"users",id);
-              const NewImgUrl = {ImgUrl:url}
-              await updateDoc(userDoc,NewImgUrl);
-             setLoading(false);
-           
-     }
+     
  
    const onReelsClick = ()=>{
        setstorynumber(-1)
@@ -180,23 +126,23 @@ function Mind({Addshorts,smallDevice}){
     return(
         <div className = "Mind">
         
-         {showprofile && <ShowProfileOnClick onClose = {()=>Setshowprofile(false)} url = {ImgUrl}/>}
+         {showprofile && <ShowProfileOnClick onClose = {()=>Setshowprofile(false)} url = {imgUrl}/>}
           <div className = "top">
-              <div className = "profile-pic" style = {{backgroundImage:`url(${ImgUrl})`}}
+              <div className = "profile-pic" style = {{backgroundImage:`url(${imgUrl})`}}
                   onClick = {()=>Setshowprofile(true)}
               > 
                     <div className = "inp"> 
-                        <input type = "file" onChange = {profileChange} onClick = {()=>Setshowprofile(false)}/>
+                        <input type = "file"  onClick = {()=>Setshowprofile(false)}/>
                     </div>
               </div>
              <div className = "input" onClick = {()=>navigate('/post')}>  
-                   <h4> How's your day {Name} ?</h4> 
+                   <h4> How's your day Name ?</h4> 
              </div>
              
           </div>
         
           <div className = "bottom">
-           <div className = "display"> 
+           <div className = "display" onClick = {()=>navigate('/post')}> 
                     
                   <RiLiveFill color = "crimson"  size = "1.5rem"/>
                    {!smallDevice &&  <h6>Live Video</h6>}

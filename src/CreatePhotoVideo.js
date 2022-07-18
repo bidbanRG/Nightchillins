@@ -9,9 +9,9 @@ import {useNavigate} from 'react-router-dom';
 function CreatePhotoVideo(){
 
 
-  const {setaddPhotoVideo,getPhoto,setgetPhoto} = useContext(UserPost);
-  const {Person,setPerson,Post,setPostlist,setLoading,plqx178,postTime,setpostTime} = useContext(UserContext);
-  const {Name,ImgUrl,id} = Person;
+  
+  const {Person,setPerson,setLoading} = useContext(UserContext);
+  const { name,imgUrl } = Person;
   const photo = useRef(false);
   const [photoname,setphotoname] = useState(false);
  
@@ -27,29 +27,10 @@ function CreatePhotoVideo(){
             }
              
               setLoading(true);
-             const imgRef = ref(storage,`profile-pic/${Date.now()}`);
-             //  uploadBytes(imgRef,file).then(()=>{
-             //    getDownloadURL(imgRef).then((url)=>{
-             //          const USERS = collection(db,'posts');
-                       
-                    
-                        
-             //            setPostlist([{Userid:id,Type:'image',Posturl:url,when:Date.now()},...Post]);
-             //            addPhotoPost(url);
-
-                    
-                    
-             //    }).catch((err)=>{console.log(err)});
-             // }).catch((err)=>{console.log(err)}); 
-             await uploadBytes(imgRef,file);
-             const url = await getDownloadURL(imgRef);
              
-            const POST = collection(db,'posts');
-             await addDoc(POST,{Userid:Person.id,Type:'image',Like:0,Posturl:url,when:Date.now()});
-            setPostlist([{Userid:id,Type:'image',Posturl:url,when:Date.now()},...Post]);
                  
-                setLoading(false);
-             // setaddPhotoVideo(false);
+              setLoading(false);
+            
                 navigate(-1);
      }
      const onPhotoSelection = (e)=> {
@@ -72,9 +53,9 @@ function CreatePhotoVideo(){
            </div>
           <div className = "divPosthead1">
                  <div className="profile-pic2" 
-                  style = {{backgroundImage : `url(${ImgUrl})`}}
+                  style = {{backgroundImage : `url(${imgUrl})`}}
                  ></div>
-                 <h4>{Name}</h4>
+                 <h4>{ name }</h4>
            </div> 
            <div className = "divPostinput"> 
               <div className = "divPostinputbtn">

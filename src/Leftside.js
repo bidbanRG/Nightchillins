@@ -13,7 +13,8 @@ function Leftside() {
       const Left = useRef();
    
      const {Person} = useContext(UserContext);
-     const {Name,ImgUrl} = Person;
+     const {name,imgUrl } = Person;
+     console.log(name,imgUrl);
     
          let SIZE = '1.5rem'
     return (   
@@ -25,7 +26,7 @@ function Leftside() {
              
              <div className="profile">
                  <Image/>
-                 <h3>{Name}</h3>                 
+                 <h3>{ name }</h3>                 
              </div>
            
            <div className="left-content">
@@ -98,9 +99,9 @@ function Leftside() {
 function Image(){
  
      const {Person} = useContext(UserContext);
-     const {ImgUrl} = Person;
+     const { imgUrl } = Person;
    return(
-      <div className = "Img"   style = {{backgroundImage:`url(${ImgUrl})`}} > 
+      <div className = "Img"   style = {{backgroundImage:`url(${imgUrl})`}} > 
            
       </div>
    )

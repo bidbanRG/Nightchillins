@@ -8,53 +8,18 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import Createpost from './Createpost';
 import CreatePhotoVideo from './CreatePhotoVideo';
 import Ticker from 'react-ticker'
-
+import axios from 'axios';
 import Reels from './Reels'
-
 import {UserContext} from './UserContext';
+const ImgUrl = 'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'
+
 function App() {
 
     const [islogin,setLogin] = useState(false);
-    const [Person,setPerson] = useState({Name:"",Password:"",ImgUrl:""}); 
-    const [Post,setPostlist] = useState([]);    
-    const [plqx178,setUsers] = useState([]);
-    const [Loading,setLoading] = useState(false);
-    const [getPost,setgetPost] = useState("") 
-   const [getPhoto,setgetPhoto] = useState("");   
-   const [postTime,setpostTime] = useState();
-
-    const profileUpdate = async (id,url)=>{
-           const userDoc = doc(db,"users",id);
-           const NewImgUrl = {ImgUrl:url}
-           await updateDoc(userDoc,NewImgUrl);
-      }
-    const UserPost = async (id,url)=>{
-           const userDoc = doc(db,"posts",id);
-           const NewImgUrl = {ImgUrl:url}
-           await updateDoc(userDoc,NewImgUrl);
-    }   
+    const [Person,setPerson] = useState({name:"",password:"",imgUrl:""}); 
+    const URL = 'http://localhost:9000';
+ 
    
-
-   
-
-   const getPosts = async ()=>{
-    const USERS_POSTS = collection(db,"posts"); 
-    const q = query(USERS_POSTS,orderBy('when','desc'));
-    
-       let data = await getDocs(q);
-
-    const AllPost = data;
-    setPostlist(AllPost.docs.map((doc)=>({...doc.data(), id:doc.id})));
-  
-  }
-  
-    const getUsers =  ()=>{
-              const USERS = collection(db,"users"); 
-            onSnapshot(USERS,(snap)=>{
-           setUsers(snap.docs.map((doc)=>({...doc.data(), id:doc.id})));
-      
-         
-   })}
    
 
     const LOG_OUT = ()=>{
@@ -64,79 +29,37 @@ function App() {
       window.location.reload(true);
       setPerson(null);
     }
- const User_exist = (uname,upassword)=>{
-
-    const user =  plqx178.filter((user)=>{
-        return user.Name === uname && user.Password === upassword;
-    })
-    return user;
-
-   }
-   
-   // useEffect(()=>{
-   // if(Person.id !== undefined) 
-   //     profileUpdate(Person.id,Person.ImgUrl);
-   //     setLoading(false);
-   // },[Person.ImgUrl])
-  useEffect(()=>{
-   getPosts(); 
-   
- },[Post.length])
-  useEffect(()=>{
-   setLoading(false)
-  },[Post])
-
-  
-  
  
-  useEffect(()=>{
-   getUsers(); 
-    if(Person.id === undefined && Person.Name.length > 0){
-        const newuser = User_exist(Person.Name,Person.Password);
-           setPerson({...Person,id:newuser[0].id});
-           console.log('newuser');
-       }
- },[plqx178.length]);
+   
+  
  
   function Profile(){
 
-    
+    //Put the Router tag <>
     return (
      
-        <Router>    
+        <Router>   
         <div className = 'app'>  
-        <Header Logout = {()=>LOG_OUT()}/>
-       
+         
+         <Header/>
+
+         <Body/>
         
-            <Body/>
-     
-       </div>
-       </Router>
+           
+        </div>
+      </Router>
     )
      
   }
-  useEffect(()=>{
-  const inLocal = () => {
-         const Uname = localStorage.getItem('NightchilinsName'); 
-         const Upassword = localStorage.getItem('NightchilinsPassword');
-        setLogin(Upassword && Uname);
-         
-        if(Uname && Upassword && plqx178.length){ 
-         const UMser =  User_exist(Uname,Upassword); 
-         setPerson(UMser[0]);
-           
-        }
-        
-  }
-  inLocal();
-},[plqx178.length]);
+ 
   
   return (
     
    
  
-    <UserContext.Provider value = {{getPost,setgetPost,getPhoto,setgetPhoto,Person,setPerson,islogin,setLogin,Post,plqx178,setPostlist,setUsers,setLoading,Loading,setpostTime,postTime}}>  
-       { (plqx178.length) ? ( !islogin ?   <Login/> :  <Profile/> ) : <div> Loading...</div> }
+    <UserContext.Provider value = {{Person,setPerson,islogin,setLogin,URL}}>  
+       {   !islogin ?   <Login/> :  <Profile/>  }
+      
     </UserContext.Provider> 
     
    
@@ -148,41 +71,70 @@ function App() {
 
 
 function Login() {
-   const [New,setNew] = useState(false);
+  
     
-   const {Person,setPerson,islogin,setLogin,plqx178,setUsers} = useContext(UserContext);
+   const {Person,setPerson,islogin,setLogin,URL} = useContext(UserContext);
   
    let name = useRef();
    let password = useRef();
-     const USERS = collection(db,"users"); 
-
     
+const LogIn = async () => {
+   
+   try{ 
+     const id =  localStorage.getItem(`NightchilinsId`);
+     if(!id) return alert('No User Found');
+      console.log(id);
+      name.current.value = name.current.value.trim();
+      password.current.value = password.current.value.trim();
     
-    const make_account = async ()=>{
-        await addDoc(USERS,{Name: name.current.value,Password: password.current.value,
-        ImgUrl:'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'
-      })   
-        
-    }
-  
-    const fun = async (NAME)=>{
-    const USERS = collection(db,'users');
-    const q = query(USERS, where('Name','==', NAME));
-    const snap = await getDocs(q);
-            console.log(snap.docs.map((doc)=>(doc.data())))
-    }
+    if(name.current.value.length < 3)  return alert("name must be atleast 3 words")
+    if(password.current.value.length < 5) return alert("password must be atleast 5 words");     
 
-  
-   const User_exist = (uname,upassword)=>{
+ 
+   const url = `${URL}/users/login`;
+   const { data } = await axios.post(url,{name:name.current.value,password:password.current.value,id:id});
+     
+      const { imgUrl } = data[0];
+     
 
-    const user =  plqx178.filter((user)=>{
-        return user.Name === uname && user.Password === upassword;
-    })
-    return user;
+     setPerson(data[0]);    
 
-   }
+     setLogin(true);
+   
+   }catch(error){ 
+       return alert(error.message); }  
+          
+}
+
+const SignIn = async () => {
+   
+   try{ 
+      name.current.value = name.current.value.trim()
+      password.current.value = password.current.value.trim()
     
+    if(name.current.value.length < 3)  return alert("name must be atleast 3 words")
+    if(password.current.value.length < 5) return alert("password must be atleast 5 words");     
 
+ 
+      const url = `${URL}/users`;
+      const { data } = await axios.post(url,{name:name.current.value,password:password.current.value,imgUrl:ImgUrl});
+      setPerson(data[0]);
+      console.log(data[0]._id);
+       
+      localStorage.setItem(`NightchilinsId`, data._id);
+      localStorage.setItem(`NightchilinsName`, data.name);
+      localStorage.setItem(`NightchilinsPassword`, data.password);
+      
+      setLogin(true);
+
+  }catch(error){
+      
+     return alert(error.message);
+
+ }
+
+          
+}
      
    
     return(
@@ -198,68 +150,8 @@ function Login() {
              <input type = 'text' autoFocus  placeholder = "Full Name..." ref = {name}/>
                 
              <input type = 'text' placeholder = "Password..." ref = {password}  />
-          { !New &&  <button onClick = {()=>{
-             
-
-            if(name.current.value.length < 3 || password.current.value.length < 5){
-             
-             if(name.current.value.length < 3)  {alert("name must be atleast 3 words");
-                     return;
-         }
-             if(password.current.value.length < 5)  {alert("password must be atleast 5 words");     
-               return;}
-          }
-         
-         else {
-          name.current.value = name.current.value.trim()
-          password.current.value = password.current.value.trim()
-          localStorage.setItem(`NightchilinsName` , name.current.value);
-          localStorage.setItem(`NightchilinsPassword` , password.current.value);
-            const user = User_exist(name.current.value,password.current.value);
-            if(user.length === 0) alert("User Not Found");
-             else {
-                 setPerson(user[0]);
-              
-              setLogin(true);
-            }
-         }     
-        }}>Sign In </button> }  
-
-        <button style = {{width:"180px"}} onClick = {()=>{
-            if(!New){
-                  setNew(!New); 
-                  return;
-            }
-              if(name.current.value.length < 3 || password.current.value.length < 5 && New){
-             
-             if(name.current.value.length < 3)  {alert("name must be atleast 3 words");
-                     return;
-         }
-             if(password.current.value.length < 5)  {alert("password must be atleast 3 words");     
-               return;}
-          }
-
-             if(New){
-                const New_user = User_exist(name.current.value,password.current.value);
-                   
-                if(New_user.length >= 1) {
-                    alert("Password to weak");
-                    return;
-                } 
-          name.current.value = name.current.value.trim()
-          password.current.value = password.current.value.trim()
-               make_account();
-    setPerson({Name:name.current.value,Password:password.current.value,ImgUrl:'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'})
-    localStorage.setItem(`NightchilinsName` , name.current.value);
-    localStorage.setItem(`NightchilinsPassword` , password.current.value);      
-             fun(name.current.value); 
-           
-              setLogin(true);
-       
-        
-            }
-  
-        }}> Create Account </button>        
+             <button onClick = {LogIn}> Log In </button>  
+             <button style = {{width:"180px"}} onClick = {SignIn}> Sign In </button>        
         </section>
 
       </div>  
@@ -269,4 +161,9 @@ function Login() {
 
 
 
+
 export default App;
+
+// setPerson({Name:name.current.value,Password:password.current.value,ImgUrl:'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'})
+//     localStorage.setItem(`NightchilinsName` , name.current.value);
+//     localStorage.setItem(`NightchilinsPassword` , password.current.value);   
