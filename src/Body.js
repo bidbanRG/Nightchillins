@@ -21,6 +21,7 @@ import Leftside from './Leftside';
 import AddStories from './AddStories';
 import AddPost from './AddPost'
 import PhotoVideo from './PhotoVideo'
+
 import {app} from './firebase'
 import {UserContext,UserPost} from './UserContext'
 function Body() {
@@ -31,13 +32,12 @@ function Body() {
   let nHeight = Height + 'px';
   let nWidth = parseInt(Width);
    let phoneMode = (nWidth <= 800) 
-    const [Loading,setLoading] = useState(false);
+  
          
     let feed = {width:"52%",height:nHeight}
     let feedForPhone = {width :'100%',marginTop :'2rem'}
    
   
-   const {Person,setPerson} = useContext(UserContext);
    
 
      
@@ -57,7 +57,7 @@ function Body() {
    
   return(
     
-    <UserPost.Provider value = {{setstorynumber,storynumber}}>
+    <UserPost.Provider value = {{ setstorynumber, storynumber }}>
       
         <div  className = "Body">
             
@@ -68,12 +68,8 @@ function Body() {
            </Routes> 
            
               
-             {/*{shorts && <AddStories/>}
-             {Loading &&  <div className = 'loading'>  
-
-                    <div className = "spin_in"><div className = 'spin'> </div>   
-
-             </div> </div> }*/}
+            {/* {shorts && <AddStories/>}*/}
+           
            
                 {(!phoneMode) && <Leftside/>} 
         
@@ -91,7 +87,7 @@ function Body() {
            }
 
              {/*  Adding Post Here */}
-             
+             <AddPost/>
                
               
           </div>     
@@ -114,7 +110,7 @@ function Mind(smallDevice){
     
      let navigate = useNavigate();
   
-   const { imgUrl } = Person; 
+   const { name,imgUrl } = Person; 
     
      
  
@@ -136,7 +132,7 @@ function Mind(smallDevice){
                     </div>
               </div>
              <div className = "input" onClick = {()=>navigate('/post')}>  
-                   <h4> How's your day Name ?</h4> 
+                   <h4> How's your day {name} ?</h4> 
              </div>
              
           </div>

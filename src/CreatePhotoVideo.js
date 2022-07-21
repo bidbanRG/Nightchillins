@@ -10,7 +10,7 @@ function CreatePhotoVideo(){
 
 
   
-  const {Person,setPerson,setLoading} = useContext(UserContext);
+  const {Person,setPerson,setLoading,URL} = useContext(UserContext);
   const { name,imgUrl } = Person;
   const photo = useRef(false);
   const [photoname,setphotoname] = useState(false);

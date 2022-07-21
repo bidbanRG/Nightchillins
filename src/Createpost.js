@@ -1,25 +1,39 @@
 import React, {useState,useRef,useContext} from 'react'
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
-import Axios from 'axios';
-
+import axios from 'axios';
+import {URL} from './uri';
 import {UserContext,UserPost} from './UserContext'
 import "./post.css"
 import {useNavigate} from 'react-router-dom';
 function Createpost() {
     
     
-   const {Person,setLoading} = useContext(UserContext);
+   const {Person} = useContext(UserContext);
 const { name,imgUrl } = Person;
 const text = useRef("");
 let navigate = useNavigate();
+ 
  const sendPost = async ()=>{
     if(text.current.value.length === 0) {return;}
-    // setgetPost(text.current.value);
-    // setpostTime(Date.now());
+
+     try{
       
-      
-    
-      navigate(-1);
+      const postBody =  {
+          Text:text.current.value,
+          Type:'text',
+          Userid:Person._id,
+          When:Date.now(),          
+       }
+     
+      await axios.post(URL + '/posts',postBody);
+      console.log('send');
+     
+
+     }catch(error){
+        return alert(error.message);
+     }
+     
+     navigate(-1)
  }
 
    

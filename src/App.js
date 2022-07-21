@@ -7,6 +7,7 @@ import {collection,getDocs,addDoc,updateDoc,doc,query,where,onSnapshot,add,order
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import Createpost from './Createpost';
 import CreatePhotoVideo from './CreatePhotoVideo';
+import Loader from './Loader'
 import Ticker from 'react-ticker'
 import axios from 'axios';
 import Reels from './Reels'
@@ -18,10 +19,35 @@ function App() {
     const [islogin,setLogin] = useState(false);
     const [Person,setPerson] = useState({name:"",password:"",imgUrl:""}); 
     const URL = 'http://localhost:9000';
- 
-   
-   
+    const [loading,setLoading] = useState(false);
+    
+    useEffect(() => {
+        
+      const IsLoggedIn = async () => {
+        try{ 
 
+         const name =  localStorage.getItem(`NightchilinsName`);
+         const password = localStorage.getItem(`NightchilinsPassword`);
+         const id = localStorage.getItem(`NightchilinsId`);
+         if(!name && !password) return;
+          setLoading(true);
+         const url = URL + '/users/login'; 
+        const { data } = await axios.post(url,{name,password,id});
+        
+         setPerson(data[0]);
+         setLogin(true);
+         setLoading(false);
+        }catch(error){
+            return alert(error.message);
+        }
+      }
+         IsLoggedIn(); 
+
+    },[])
+   
+    
+
+  
     const LOG_OUT = ()=>{
       setLogin(false);
       localStorage.removeItem('NightchilinsName');
@@ -32,10 +58,26 @@ function App() {
  
    
   
+ if(loading) return <Loader/>
+  
+  
+  return (
+    
+   
  
-  function Profile(){
+    <UserContext.Provider value = {{Person,setPerson,islogin,setLogin,URL}}>  
+       {   !islogin ?   <Login/> :  <Profile/>  }
+    </UserContext.Provider> 
+    
+   
+  
+  );
+}
 
-    //Put the Router tag <>
+
+function Profile(){
+
+   
     return (
      
         <Router>   
@@ -52,22 +94,6 @@ function App() {
      
   }
  
-  
-  return (
-    
-   
- 
-    <UserContext.Provider value = {{Person,setPerson,islogin,setLogin,URL}}>  
-       {   !islogin ?   <Login/> :  <Profile/>  }
-      
-    </UserContext.Provider> 
-    
-   
-  
-  );
-}
-
-
 
 
 function Login() {
@@ -77,12 +103,35 @@ function Login() {
   
    let name = useRef();
    let password = useRef();
+   const [pressedKey,setPressedKey] = useState('NoKeyPressed');
+
+  useEffect(() => {
+        
+      
+
+     if(pressedKey === 'Enter') LogIn();
+      
     
+    document.addEventListener('keydown',(e) => {
+        if(e.key === 'Enter') setPressedKey(e.key)
+    });
+     
+     return () => document.removeEventListener('keydown',(e) => {
+          if(e.key === 'Enter') setPressedKey(e.key)
+    });
+    
+  },[pressedKey]);
+
+
+
 const LogIn = async () => {
    
+
+  
+
    try{ 
      const id =  localStorage.getItem(`NightchilinsId`);
-     if(!id) return alert('No User Found');
+     if(id === null || id === undefined) return alert('No User Found');
       console.log(id);
       name.current.value = name.current.value.trim();
       password.current.value = password.current.value.trim();
@@ -94,8 +143,10 @@ const LogIn = async () => {
    const url = `${URL}/users/login`;
    const { data } = await axios.post(url,{name:name.current.value,password:password.current.value,id:id});
      
-      const { imgUrl } = data[0];
-     
+      if(data.length === 0) return alert('NO User Found');     
+    
+      localStorage.setItem(`NightchilinsName`, data[0].name);
+      localStorage.setItem(`NightchilinsPassword`, data[0].password);
 
      setPerson(data[0]);    
 
