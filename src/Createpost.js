@@ -4,12 +4,14 @@ import axios from 'axios';
 import {URL} from './uri';
 import {UserContext,UserPost} from './UserContext'
 import "./post.css"
+import Loader from './Loader'
 import {useNavigate} from 'react-router-dom';
 function Createpost() {
     
     
    const {Person} = useContext(UserContext);
 const { name,imgUrl } = Person;
+const [loading,setLoading] = useState(false);
 const text = useRef("");
 let navigate = useNavigate();
  
@@ -25,18 +27,21 @@ let navigate = useNavigate();
           When:Date.now(),          
        }
      
+      setLoading(true);
       await axios.post(URL + '/posts',postBody);
-      console.log('send');
-     
-
-     }catch(error){
+      setTimeout(()=>{
+         setLoading(false);
+         navigate(-1)
+      },[300]);
+      
+      }catch(error){
+        setLoading(false);
         return alert(error.message);
      }
      
-     navigate(-1)
  }
 
-   
+   if(loading) return <Loader/>
     return (
         <div className = "post">
             

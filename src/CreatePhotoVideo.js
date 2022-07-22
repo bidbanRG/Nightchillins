@@ -1,48 +1,82 @@
-import React,{useContext,useRef,useState} from 'react'
+import React,{useContext,useState} from 'react'
 import {UserContext,UserPost} from './UserContext';
-import {db} from './firebase';
-import {collection,getDocs,addDoc,updateDoc,doc,query,where,deleteDoc} from 'firebase/firestore';
-import {getDownloadURL,ref,uploadBytes} from "firebase/storage";
-import {storage} from './firebase'
+import {URL, uploadURL, preset} from './uri';
+import axios from 'axios';
+import Loader from './Loader';
 import './divPost.css'
 import {useNavigate} from 'react-router-dom';
 function CreatePhotoVideo(){
 
 
   
-  const {Person,setPerson,setLoading,URL} = useContext(UserContext);
+  const {Person} = useContext(UserContext);
   const { name,imgUrl } = Person;
-  const photo = useRef(false);
-  const [photoname,setphotoname] = useState(false);
  
-   
+  const [loading,setLoading] = useState(false);
+  const [photoChoosen,setPhotoChoosen] = useState(false); 
     const onPhotoPost = async ()=>{
-            const file = photo.current.files[0];
-          
            
-            
-            if(!file.type.includes('image')) {
-                alert("Profile Picture must be an Image")
-                return;
-            }
+        if(!photoChoosen) return alert('No Photo Selected');
              
+            const Data = new FormData();
+            Data.append('file',photoChoosen);
+            Data.append('upload_preset',preset);             
+             
+     
+           try{
+              
               setLoading(true);
-             
-                 
-              setLoading(false);
-            
-                navigate(-1);
-     }
-     const onPhotoSelection = (e)=> {
-        const file = e.target.files[0];
-          if(!file.type.includes('image')) {
-                alert("File must be an Image")
-                return;
-            }
-            setphotoname(true);
+             const { data } = await axios.post(uploadURL,Data);
+             const { url } = data;                    
+               
+               if(!url){
+                 setLoading(false);
+                 return alert('something went wrong');
+               } 
+               
+               const postBody =  {
+                  PostUrl:url,
+                  Type:'image',
+                  Userid:Person._id,
+                  When:Date.now(),          
+               }
+              
+              await axios.post(URL + '/posts',postBody);
 
+               setLoading(false);
+               alert('photo posted');
+               navigate(-1);
+           
+           }catch(error){
+              setLoading(false);
+            return alert()
+          }
      }
+    
+    const onPhotoSelection = (e)=> {
+          
+        const file = e.target.files[0];
+           
+           if(!file){
+            setPhotoChoosen(false);
+            return;
+          }
+
+          if(!file.type.includes('image')){ 
+               setPhotoChoosen(false);
+               return alert("File must be an Image") 
+            }
+          
+         setPhotoChoosen(file);
+
+   }
+ 
+
+
  let navigate = useNavigate();
+
+  if(loading) return <Loader/>
+   
    return (
 
      <div className = "divPost"> 
@@ -60,11 +94,15 @@ function CreatePhotoVideo(){
            <div className = "divPostinput"> 
               <div className = "divPostinputbtn">
                   <h5>  
-                    { (!photoname) && '.Add Photo.'}
-                    { (photoname) && <marquee style = {{width:'100%'}}> 
-                    {photo.current.files[0].name} </marquee>}
+                    {  !photoChoosen ? 
+
+                         ' Add Photo ' 
+                            :
+                    <marquee style = {{width:'100%'}}> 
+                       { photoChoosen.name } 
+                    </marquee>}
                 
-                     <input type = 'file' ref = {photo} onChange = {onPhotoSelection}/>
+                     <input type = 'file'  onChange = {onPhotoSelection}/>
                   </h5>
                
               </div> 
