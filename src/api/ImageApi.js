@@ -7,7 +7,7 @@ const promise = (source) => {
        const img = new Image();
        img.src = source;
        img.onload = resolve;
-       },500)
+       },300)
     })
 };
 

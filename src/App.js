@@ -11,6 +11,7 @@ import Loader from './Loader'
 import Ticker from 'react-ticker'
 import axios from 'axios';
 import Reels from './Reels'
+
 import {UserContext} from './UserContext';
 const ImgUrl = 'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'
 
@@ -64,13 +65,14 @@ function App() {
   return (
     
    
- 
+     
     <UserContext.Provider value = {{Person,setPerson,islogin,setLogin,URL}}>  
        {   !islogin ?   <Login/> :  <Profile/>  }
     </UserContext.Provider> 
     
    
   
+
   );
 }
 

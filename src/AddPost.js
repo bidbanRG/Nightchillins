@@ -51,14 +51,13 @@ const PostView = (obj) => {
   // console.log(longAgo(obj.When));
  
     
-    const personResource = createResource();
-     
+     const personResource = createResource();
 
    return (
          <div className = 'addpost' > 
     
-          <Suspense fallback = { <Preview/> }>
-             <Profile resource = {personResource} id = {obj.Userid} when = {obj.When} />
+          <Suspense  fallback = { <Preview/> }>
+             <Profile personResource = {personResource} id = {obj.Userid} when = {obj.When} />
            </Suspense>   
             
         {      obj.Type === 'text' ? 
@@ -78,6 +77,29 @@ const PostView = (obj) => {
     )
 
 
+}
+
+const Profile = ({personResource,id,when}) => {
+ 
+  const person = personResource.person.read({_id:id});
+ 
+  const { name, imgUrl } = person;
+   const imageResource = createImageResource();
+   
+   
+   return( 
+    
+      <header> 
+        <Suspense fallback = {<img src = {imgUrl} className = "who preview"/> }>
+          <Image imageResource = {imageResource} src = {imgUrl} className = "who"/>
+        </Suspense>
+         <div className = "who_details">
+            <h4> {name} </h4>
+         <h5 className = "date">  { longAgo(when) } </h5>
+       </div>
+     </header>
+    
+   )
 }
 
 const BottamTab = () => {
@@ -103,29 +125,6 @@ const BottamTab = () => {
 
 
 
-}
-
-const Profile = ({resource,id,when}) => {
- 
-  const person = resource.person.read({_id:id});
-  console.log(person);
-  const { name, imgUrl } = person;
-   const ImageResource = createImageResource();
-   
-   
-   return( 
-    
-      <header> 
-        <Suspense fallback = {<img src = {imgUrl} className = "who preview"/> }>
-          <Image imgResource = {ImageResource} src = {imgUrl} className = "who"/>
-        </Suspense>
-         <div className = "who_details">
-            <h4> {name} </h4>
-         <h5 className = "date">  { longAgo(when) } </h5>
-       </div>
-     </header>
-    
-   )
 }
 
 
@@ -165,9 +164,9 @@ const Preview  = () => {
   
   )
 }
-const Image = ({src,imgResource,className}) => {
+const Image = ({src,imageResource,className}) => {
    
-   imgResource.image.read(src);
+   imageResource.image.read(src);
    return (
       <img src = {src} className = {className}/> 
     )

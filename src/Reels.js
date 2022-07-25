@@ -1,118 +1,107 @@
 import React,{useRef,useEffect,useContext,useState} from 'react';
-import './App.css'
-import Ticker from 'react-ticker'
-import {db,app_storage} from './firebase';
-import {storage} from './firebase'
-import {collection,getDocs,addDoc,updateDoc,doc,query,where,onSnapshot,add,orderBy} from 'firebase/firestore';
-import {getDownloadURL,ref,uploadBytes} from "firebase/storage";
+import axios from 'axios';
+import Loader from './Loader';
+import { URL ,preset, uploadVideoURL} from './uri';
 import {UserContext,UserPost} from './UserContext'
 import { useInView,InView } from 'react-intersection-observer';
 import './reels.css'
-import './App.css'
+import {StoryContext} from './Context/StoriesContext';
 import {AiFillHeart} from 'react-icons/ai';
 import {FaComment} from  'react-icons/fa';
 import {MdThumbDown,MdThumbUp} from 'react-icons/md'
 import {useNavigate} from 'react-router-dom';
+
+
 function Reels({storynumber}){
-   const {Person,plqx178} = useContext(UserContext);
+   const { Person } = useContext(UserContext);
+   const { REELS,setREELS} = useContext(StoryContext);
    const {setstorynumber} = useContext(UserPost);
    
-   const reelRef = useRef();
+ 
    const descriptionRef = useRef("");
-   const [REELS,setREELS] = useState([]);
-   const [clickREELS,setclickREELS] = useState([]);
-   const [filename,setfilename] = useState('__');
+   
+
    const [swipe,setswipe] = useState(true); 
-   const [correct,setcorrect] = useState(false);
-   const [onUpload,setonUpload] = useState(false);          
-    useEffect(()=>{
-       const USERS_REELS = collection(db,"reels"); 
-       const q = query(USERS_REELS,orderBy('when','desc'));
-       
-            onSnapshot(q,(snap)=>{
-           setREELS(snap.docs.map((doc)=>({...doc.data(), id:doc.id})))
-          
-       });
-
-          
-     },[REELS.length])   
-
-   const upload_REEL_DATA = async (url)=>{
-     const USERS_REELS = collection(db,"reels"); 
-    await addDoc(USERS_REELS,
-          {when:Date.now(),
-           Name:Person.Name,
-           ImgUrl:Person.ImgUrl,
-           Description:descriptionRef.current.value,
-           ReelUrl:url  
-         })
-   }  
-   const upload_REEL = async ()=>{
-
-          if(!correct){
-             alert('Nothing is Added');
-             return;
-          }
-             
-            const file = reelRef.current.files[0];
-            setcorrect(true);
-             const imgRef = ref(storage,`reels/${Date.now()}`);
-            setonUpload(true);
-            let upload = await uploadBytes(imgRef,file);
-            let url = await getDownloadURL(imgRef);
-           upload_REEL_DATA(url);   
-         setfilename('__');
-         setonUpload(false);       
-         navigate(-1);
-      
-
-    }
+   const [videoChoosen,setVideoChoosen] = useState(false);          
+   const [onFirst,setonFirst] = useState(1);
+   const [loading,setLoading] = useState(false);
  let navigate = useNavigate();
  const onClose = ()=>{
     navigate(-1);
  }
-  let head = 'ADD+'
+  let ADD = 'ADD+'
 
   const onStoryClose = ()=>{ 
       setstorynumber(-1);
       onClose();
   }
  
-  const [onFirst,setonFirst] = useState(1);
+  
 
-const onVideoSelection = (e)=>{
-    const file = e.target.files[0];
-    
-        if(file.size > 5000000) {
-            alert('Oops file size must be less than 5mb!!');
-           setcorrect(false);
-            return;
-        }
-    if(file.type.includes("video")){
-        setfilename(e.target.files[0].name);
-        console.log(file.duration);
-        setcorrect(true);
-        return;
+   const upload_REEL = async ()=>{
+
+         
+         try{
+            
+            if(descriptionRef.current.value.length === 0)
+                return alert('Add Description to your Story');
+            
+            const Data = new FormData();
+            Data.append('file',videoChoosen);
+            Data.append('upload_preset',preset);
+            setLoading(true);
+            const { data } = await axios.post(uploadVideoURL,Data);
+            const { url } = data;
+            console.log(url);
+            if(!url){
+               setLoading(false);
+             return alert('Something went wrong');
+           }
+
+           const UploadReel = {
+                Description:descriptionRef.current.value,
+                PostUrl:url,
+                Userid:Person._id,
+                When:Date.now()
+            }
+            console.log(UploadReel);
+            const response = await axios.post(URL + '/stories',UploadReel); 
+               setLoading(false);
+           console.log(response.data);
+           setREELS([response.data, ...REELS]);
+           navigate(-1);
+         }catch(error){
+            setLoading(false);
+            return alert(error.message);
+         }
+         
+             
+         
+      
+
     }
+  
+
+  const onVideoSelection = (e)=>{
+       const file = e.target.files[0];
+        if(!file) return;
+        if(!file.type.includes("video")){
+            videoChoosen(false);
+            return alert('file must be a Video')     
+        }
+        
+        if(file.size > 5000000){
+            videoChoosen(false);
+            return alert('Oops file size must be less than 5mb!!');
+        } 
+           
+       setVideoChoosen(file);   
+ }  
    
-   
-     alert('file must be a Video')
-     setcorrect(false);
-        return;
-}  
-   
 
 
 
-   function Loader(){
-      return (
-         <div className = 'loading'>  
-
-                    <div className = "spin_in"><div className = 'spin'> </div>   
-
-             </div> </div>
-      )
-}
+  
 
  if(storynumber > -1){
 
@@ -129,9 +118,9 @@ return (<div className = 'back'>
                 </div> 
             }
                   {
-                REELS.slice(storynumber,REELS.length).concat(REELS.slice(0,storynumber)).map((data)=>(
+                REELS.slice(storynumber,REELS.length).concat(REELS.slice(0,storynumber)).map((obj)=>(
                    
-                    <Video key = {data.id} src = {data.ReelUrl} Data = {data} Close = {onStoryClose}/>
+                    <Video key = {obj._id}  {...obj} Close = {onClose} />
                   ))
                 }
 
@@ -148,7 +137,7 @@ return (<div className = 'back'>
           
 
               <div className = 'reels'>
-            {onUpload && <Loader/>}  
+            {loading && <Loader/>}  
         { swipe &&   <div className = 'swipe-up' onScroll = {()=>{setswipe(false)}}> 
               
                 <span> Swipe Up To Watch Or Continue to Add </span>
@@ -161,32 +150,24 @@ return (<div className = 'back'>
                      <div className='uploadreels'> 
                       
                        <h1>  
-                         { (filename === '__') ?
-                              head :
+                         { !videoChoosen ?
+                              ADD :
                               <div className = 'reel-text'>
                                 
                                  <div className = 'opiloka'>
-                                <Ticker mode = 'smooth'>
-                                      {({ index }) => (
-                                 filename
-                                 )}
-                                 </Ticker>
+                                  <marquee>
+                                     {videoChoosen.name}
+                                  </marquee>
                                 </div>
                               </div>   
                          }
                        </h1>
                      </div>
-                    <input ref = {reelRef} className = 'addfile' type = 'file' onChange = {onVideoSelection}/>
+                    <input  className = 'addfile' type = 'file' onChange = {onVideoSelection}/>
                     <input ref = {descriptionRef} onChange = {(e)=>{descriptionRef.current.value = e.target.value}} className = 'adddesc' type = 'text' placeholder = ' add description...' autoFocus/>
                     <div className = 'reel-send-btn' onClick = {upload_REEL} > <h1> SEND </h1> </div>
                  </div>
-                {
-                  REELS.map((data)=>(
-                   
-                    <Video key = {data.id} src = {data.ReelUrl} Data = {data} Close = {onClose}/>
-                  ))
-                }
-                  
+               <AllReels Close = {onClose}/>   
            
               </div>
 
@@ -198,59 +179,85 @@ return (<div className = 'back'>
    
 }
 
-function Video({src,Data,Close}){
+const AllReels = ({Close}) => {
+     const { REELS,setREELS} = useContext(StoryContext);
+  return <> {REELS.map((obj) =>  <Video key = {obj._id}  {...obj} Close = {Close}/>)} </> 
+}
+
+
+
+function Video(obj){
 
      
-  
+ 
+
     
    const { ref, inView, entry } = useInView({
     threshold: 0.8,
   });
   
-	
+	const { Userid,Description, PostUrl,Close} = obj;
+    const [User,setUser] = useState(false);
 	const videoRef = useRef();
     const handleReels = (e)=>{
     	
       if(e.target.paused) e.target.play();
       else e.target.pause();
     }
-  
-    useEffect(()=>{
+   const fun = async () => {
+        try{
+            
+            const {data} = await axios.post(URL + '/users/getbyId',{ _id:Userid });
+            setUser(data[0]);      
+        }catch(error){
+          console.log(error.message);
+        }
+}
+
+useEffect(()=>{
         if(videoRef){
-        
-        	if(inView) 
-               videoRef.current.play();   
-            else 
+          
+        	if(inView){
+                videoRef.current.play();
+
+            }
+             else 
               videoRef.current.pause();   
             
-        videoRef.current.currentTime = 0;
-        }  
+           videoRef.current.currentTime = 0;
+       }  
 
 },[inView])
-      const {Name,ImgUrl,Description} = Data;
+
+
+useEffect(() => {
+    fun();
+},[]);
+
+
+
 
 	return( 
     
    
          
       <div ref = {ref} onChange = {(inView, entry) => console.log('Inview:', inView)} className = 'reel_parent'> 
-          <button onClick = {Close}> X </button>  
-       <video ref = {videoRef} src={src} type="video/mp4" className = 'reel'  autoPlay loop 
+          <button onClick = {Close}> X </button>
+           
+       <video ref = {videoRef} src={PostUrl} type="video/mp4" className = 'reel'  autoPlay loop 
           onClick = {handleReels}> 
       </video>
           <div className = 'auro'> 
               <div className = 'avtar-content'>
-                <div className = 'avtar-reel' style = {{backgroundImage : `url(${ImgUrl})`}} ></div>
-                <h3> {Name} </h3>
+                <div className = 'avtar-reel' style = {{backgroundImage : `url(${User && User.imgUrl})`}} ></div>
+                <h3> {User && User.name} </h3>
               </div>  
               <div className = 'reel-description'> 
               <div className = 'reel-text'>
         
-                 <Ticker mode = 'smooth'>
-        {({ index }) => (
+             <marquee>
                <h4> {Description} </h4>
-        )}
-    </Ticker>
+             </marquee>
                  </div>
               </div>
              <div className = 'like-comment'> 

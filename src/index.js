@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import StoryProvider from './Context/StoriesContext';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+     <StoryProvider>
+       <App />
+     </StoryProvider> 
   </React.StrictMode>,
   document.getElementById('root')
 );

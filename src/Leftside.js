@@ -1,4 +1,4 @@
-import {React,useRef,useContext} from 'react'
+import {React,useRef,useContext,Suspense} from 'react'
 import {UserContext} from './UserContext'
 import {FaUserFriends,FaClipboard} from 'react-icons/fa'
 import { MdBookmark, MdGroups,  MdRestore,MdSubscriptions } from 'react-icons/md'
@@ -7,6 +7,7 @@ import {BsFillBagDashFill,BsMessenger,BsFillCloudHaze2Fill,BsFillStarFill} from 
 import {SiFacebooklive} from 'react-icons/si'
 import {HiSpeakerphone} from 'react-icons/hi'
 import {ImStatsBars} from 'react-icons/im'
+import Profile from './Profile';
 import './left.css'
 function Leftside() {       
   
@@ -14,7 +15,7 @@ function Leftside() {
    
      const {Person} = useContext(UserContext);
      const {name,imgUrl } = Person;
-     console.log(name,imgUrl);
+   
     
          let SIZE = '1.5rem'
     return (   
@@ -25,7 +26,9 @@ function Leftside() {
                        
              
              <div className="profile">
-                 <Image/>
+              <Suspense fallback = {<Preview/>}>
+                <Profile/>
+              </Suspense>  
                  <h3>{ name }</h3>                 
              </div>
            
@@ -96,17 +99,14 @@ function Leftside() {
 
 
 
-function Image(){
- 
-     const {Person} = useContext(UserContext);
-     const { imgUrl } = Person;
-   return(
-      <div className = "Img"   style = {{backgroundImage:`url(${imgUrl})`}} > 
-           
-      </div>
-   )
-}  
- 
+const Preview  = () => {
+    return(
+     <header>
+        <div className = 'who-preview'/>
+    </header>
+  
+  )
+}
 
 
 export default Leftside

@@ -65,3 +65,10 @@ display: flex;
     color:gray;
     display: flex;
 }
+@media(max-width : 768px) {
+ .Right{
+    height: 0;
+    width: 0;
+    opacity: 0;
+}
+}

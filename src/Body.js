@@ -1,6 +1,7 @@
-import React,{useState,useEffect,useContext} from 'react'
+import React,{useState,useEffect,useContext,Suspense} from 'react'
 import {getDownloadURL,ref,uploadBytes} from "firebase/storage";
 import {BrowserRouter as Router,Routes,Route,useNavigate} from 'react-router-dom';
+import './Addpost.css'
 import {db} from './firebase';
 import {collection,getDocs,addDoc,updateDoc,doc} from 'firebase/firestore';
 import {storage} from './firebase'
@@ -21,20 +22,41 @@ import Leftside from './Leftside';
 import AddStories from './AddStories';
 import AddPost from './AddPost'
 import PhotoVideo from './PhotoVideo'
+import Profile from './Profile';
 
-import {app} from './firebase'
-import {UserContext,UserPost} from './UserContext'
+import {app} from './firebase';
+import {UserContext,UserPost} from './UserContext';
 function Body() {
 
    
  
+  
+  
+   
+  return(
+    
+    
+          <div  className = "Body">
+              <Leftside/>
+                 <Feed/>
+             <Rightside/>
+           </div>
+     
+     
+    ) 
+    
+}
+
+
+const Feed = () => {
+  
   const [Width,Height] = useGetWindowDimensions();
   let nHeight = Height + 'px';
   let nWidth = parseInt(Width);
-   let phoneMode = (nWidth <= 800) 
+   let phoneView = (nWidth <= 800) 
   
          
-    let feed = {width:"52%",height:nHeight}
+    let feedForLargeScreens = {width:"52%",height:nHeight}
     let feedForPhone = {width :'100%',marginTop :'2rem'}
    
   
@@ -53,107 +75,74 @@ function Body() {
   useEffect(()=>{
        if(storynumber >= 0) navigate('/reels');
      },[storynumber])  
-  
-   
-  return(
-    
+
+    return(
+        
     <UserPost.Provider value = {{ setstorynumber, storynumber }}>
+           
+           <div style = { phoneView ? feedForPhone : feedForLargeScreens } className = 'feed'> 
+           
+
+           {  (phoneView) ?
+              <>   
+                   <Mind/> 
+                   <Stories/>
+                   
+              </> 
+               : 
+              <>
+                 <Stories/> 
+                 <Mind/> 
+              </>
+           }
+
+             
+             <AddPost/>
+               
+              
+          </div>     
+      </UserPost.Provider>
+       
+    )
+}
+
+
+
+function Mind(){
+ 
       
-        <div  className = "Body">
+   
+     const {storynumber} = useContext(UserPost);
+     
+    
+    
+  
+  
+    
+     
+ 
+   
+    return(
+        <div className = "Mind">
             
             <Routes>
              <Route path = '/post' element = {<Createpost/>}/>
              <Route path = '/post-photo' element = {<CreatePhotoVideo/>}/>
              <Route path = '/reels' element = {<Reels storynumber = {storynumber}/>}/>
            </Routes> 
-           
-              
-            {/* {shorts && <AddStories/>}*/}
-           
-           
-                {(!phoneMode) && <Leftside/>} 
-        
-          
-          <div style = { phoneMode ? feedForPhone : feed} className = 'feed'> 
-          {  (phoneMode) ?
-              <div>   
-             <Mind smallDevice = {nWidth < 400} /> 
-             <Stories/> 
-              </div> : 
-             <div>
-             <Stories/> 
-             <Mind smallDevice = {nWidth < 400} /> 
-             </div>
-           }
 
-             {/*  Adding Post Here */}
-             <AddPost/>
-               
-              
-          </div>     
         
-         {(!phoneMode) && <Rightside/>} 
-        
-            </div>
-      </UserPost.Provider>
-     
-        ) 
-    
-}
-
-function Mind(smallDevice){
- 
-      const {Person,setPerson,setLoading} = useContext(UserContext);
-   
-     const {setstorynumber} = useContext(UserPost);
-     const [showprofile,Setshowprofile] = useState(false);
-    
-     let navigate = useNavigate();
-  
-   const { name,imgUrl } = Person; 
-    
-     
- 
-   const onReelsClick = ()=>{
-       setstorynumber(-1)
-       navigate('/reels');
-
-   }
-    return(
-        <div className = "Mind">
-        
-         {showprofile && <ShowProfileOnClick onClose = {()=>Setshowprofile(false)} url = {imgUrl}/>}
           <div className = "top">
-              <div className = "profile-pic" style = {{backgroundImage:`url(${imgUrl})`}}
-                  onClick = {()=>Setshowprofile(true)}
-              > 
-                    <div className = "inp"> 
-                        <input type = "file"  onClick = {()=>Setshowprofile(false)}/>
-                    </div>
-              </div>
-             <div className = "input" onClick = {()=>navigate('/post')}>  
-                   <h4> How's your day {name} ?</h4> 
-             </div>
-             
+              <Suspense fallback = {<Preview/>}>
+                <Profile/>
+              </Suspense>  
+                <ShareViews/>
           </div>
         
           <div className = "bottom">
-           <div className = "display" onClick = {()=>navigate('/post')}> 
-                    
-                  <RiLiveFill color = "crimson"  size = "1.5rem"/>
-                   {!smallDevice &&  <h6>Live Video</h6>}
-                   {smallDevice &&  <h6>Live</h6>} 
-            </div>
-           <div className = "display" onClick = {()=>navigate('/post-photo')}>  
-                    <FaPhotoVideo color = "green" size = "1.5rem"/> 
-                      {!smallDevice  && <h6>Add Photos</h6>}
-                      {smallDevice &&  <h6>Photos</h6>}
-             </div>
-           <div className = "display" onClick = {onReelsClick}>   
-                   <MdVideoLibrary color = "goldenrod"  size = "1.5rem" /> 
-                      {!smallDevice && <h6> Add Stories </h6>}
-                      {smallDevice &&  <h6> Stories </h6>}
-             </div>
+              <Live/>  
+              <Photos/>
+              <Story/>
           </div>  
        
 
@@ -161,7 +150,55 @@ function Mind(smallDevice){
    );
     
 }
-  
+ 
+const ShareViews = () => {
+     let navigate = useNavigate();
+     const { Person } = useContext(UserContext);
+     const { name } = Person; 
+    return(
+     <div className = "input" onClick = {()=>navigate('/post')}>  
+          <h4> How's your day {name} ?</h4> 
+     </div>
+    )
+} 
+
+const Live = () => {
+     let navigate = useNavigate();
+    return (
+       <div className = "display">
+             <RiLiveFill color = "crimson"  size = "1.5rem"/>
+            <h6>Live</h6>
+        </div>
+
+    )
+}
+
+const Photos = () => {
+     let navigate = useNavigate();
+    return (
+      <div className = "display" onClick = {()=>navigate('/post-photo')}>  
+          <FaPhotoVideo color = "green" size = "1.5rem"/> 
+            <h6>Photos</h6>
+      </div>
+   )
+}
+
+const Story = () => {
+     let navigate = useNavigate();
+    const { setstorynumber } = useContext(UserPost);
+     const onReelsClick = ()=>{
+       setstorynumber(-1)
+       navigate('/reels');
+
+   }
+    return (
+       <div className = "display" onClick = {onReelsClick}>   
+              <MdVideoLibrary color = "goldenrod"  size = "1.5rem" /> 
+               <h6> Stories </h6>
+        </div>
+    )
+}
+
 function useGetWindowDimensions(){
   const [Width,setWidth] = useState(window.innerWidth);
   const [Height,setHeight] = useState(window.innerHeight);
@@ -177,5 +214,12 @@ function useGetWindowDimensions(){
   return [Width,Height];
 }
 
-
+const Preview  = () => {
+    return(
+     <header>
+        <div className = 'who-preview'/>
+    </header>
+  
+  )
+}
 export default Body

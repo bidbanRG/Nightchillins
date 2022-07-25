@@ -59,7 +59,9 @@
    outline: none;
     cursor: pointer; 
 }
- 
+ .display h6{
+   color: var(--text);;
+ }
 .bottom :hover{
    background-color: var(--white-smoke);
 }
@@ -148,7 +150,7 @@ input[type=file]::file-selector-button {
        margin-top: 2.8rem;
    }
    .Mind{
-      margin-top: 0px;
+      margin-top: 15px;
    
    }
 }
