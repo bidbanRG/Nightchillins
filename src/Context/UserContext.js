@@ -28,8 +28,8 @@ const UserProvider = ({children}) => {
         
          setPerson(data[0]);
          console.log(Person);
-         setLogin(true);
          setLoading(false);
+         setLogin(true);
         }catch(error){
             return alert(error.message);
         }
