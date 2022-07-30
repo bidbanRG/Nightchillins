@@ -27,7 +27,7 @@ const UserProvider = ({children}) => {
         const { data } = await axios.post(url,{name,password,id});
         
          setPerson(data[0]);
-         console.log(Person);
+         
          setLoading(false);
          setLogin(true);
         }catch(error){
