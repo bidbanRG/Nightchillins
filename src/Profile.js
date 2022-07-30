@@ -1,12 +1,12 @@
 import React,{Suspense,useContext} from 'react';
 import './Addpost.css';
 import { createImageResource  } from './api/ImageApi';
-import {UserContext} from './UserContext'
+import {UserContext} from './Context/UserContext'
 
 
  const imageResource = createImageResource();
 
-const Profile = () => {
+const Profile = ({children}) => {
 
 	const { Person } = useContext(UserContext);
 
@@ -15,6 +15,7 @@ const Profile = () => {
     return (
     	<Suspense fallback = {<img src = {imgUrl} className = "who preview"/> }>
             <Image src = {imgUrl} />
+            {children}
         </Suspense>
       )
 }

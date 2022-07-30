@@ -1,11 +1,8 @@
 import React from 'react'
 import   './stories.css';
 import { StoryContext } from './Context/StoriesContext';
-import {collection,onSnapshot,query,orderBy} from 'firebase/firestore';
-import {db,app_storage} from './firebase';
-import {useRef,useEffect,useContext,useState} from 'react';
+import {useContext} from 'react';
 import {UserContext,UserPost} from './UserContext'
-import { useInView,InView } from 'react-intersection-observer';
 import './reels.css'
 import './App.css'
 import {useNavigate} from 'react-router-dom';
@@ -17,7 +14,7 @@ function Stories() {
    const {setstorynumber} = useContext(UserPost);
    const { REELS,setREELS } = useContext(StoryContext);
    let navigate = useNavigate();
-   console.log(REELS); 
+
    
    return (
       <div className="slider">        
@@ -74,8 +71,10 @@ function Video({src,Click,Show}){
         Show();
         Click();
    }
-  
+   
+
     
+
    return( 
     
      <div className = 'story' onClick = {AllClickEvents}>

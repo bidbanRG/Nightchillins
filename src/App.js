@@ -2,83 +2,33 @@ import { useState,useEffect,useRef,useContext } from 'react';
 import './App.css';
 import Body from './Body';
 import Header from './Header';
-import {db,app_storage} from './firebase';
-import {collection,getDocs,addDoc,updateDoc,doc,query,where,onSnapshot,add,orderBy} from 'firebase/firestore';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
-import Createpost from './Createpost';
-import CreatePhotoVideo from './CreatePhotoVideo';
+import { UserContext } from './Context/UserContext';
 import Loader from './Loader'
-import Ticker from 'react-ticker'
 import axios from 'axios';
-import Reels from './Reels'
-
-import {UserContext} from './UserContext';
+import {URL} from './uri';
 const ImgUrl = 'https://firebasestorage.googleapis.com/v0/b/nightchilins.appspot.com/o/file?alt=media&token=5538cd4a-11dc-4392-9c67-b6c406d0e578'
 
 function App() {
 
-    const [islogin,setLogin] = useState(false);
-    const [Person,setPerson] = useState({name:"",password:"",imgUrl:""}); 
-    const URL = 'http://localhost:9000';
-    const [loading,setLoading] = useState(false);
     
-    useEffect(() => {
-        
-      const IsLoggedIn = async () => {
-        try{ 
-
-         const name =  localStorage.getItem(`NightchilinsName`);
-         const password = localStorage.getItem(`NightchilinsPassword`);
-         const id = localStorage.getItem(`NightchilinsId`);
-         if(!name && !password) return;
-          setLoading(true);
-         const url = URL + '/users/login'; 
-        const { data } = await axios.post(url,{name,password,id});
-        
-         setPerson(data[0]);
-         setLogin(true);
-         setLoading(false);
-        }catch(error){
-            return alert(error.message);
-        }
-      }
-         IsLoggedIn(); 
-
-    },[])
-   
+    
+    const {Person,setPerson,islogin,setLogin,loading,setLoading} = useContext(UserContext);
     
 
-  
-    const LOG_OUT = ()=>{
-      setLogin(false);
-      localStorage.removeItem('NightchilinsName');
-      localStorage.removeItem('NightchilinsPassword');
-      window.location.reload(true);
-      setPerson(null);
-    }
- 
-   
-  
- if(loading) return <Loader/>
+   if(loading) return <Loader/>
   
   
-  return (
-    
-   
-     
-    <UserContext.Provider value = {{Person,setPerson,islogin,setLogin,URL}}>  
-       {   !islogin ?   <Login/> :  <Profile/>  }
-    </UserContext.Provider> 
-    
-   
-  
-
-  );
+  return (<>
+          {   !islogin ?   <Login/> :  <Profile/>  }
+        </>)
 }
 
 
 function Profile(){
-
+   
+    
+ 
    
     return (
      
@@ -101,7 +51,7 @@ function Profile(){
 function Login() {
   
     
-   const {Person,setPerson,islogin,setLogin,URL} = useContext(UserContext);
+   const {Person,setPerson,islogin,setLogin} = useContext(UserContext);
   
    let name = useRef();
    let password = useRef();

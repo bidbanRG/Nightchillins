@@ -1,5 +1,5 @@
 import {React,useRef,useContext,Suspense} from 'react'
-import {UserContext} from './UserContext'
+import {UserContext} from './Context/UserContext'
 import {FaUserFriends,FaClipboard} from 'react-icons/fa'
 import { MdBookmark, MdGroups,  MdRestore,MdSubscriptions } from 'react-icons/md'
 import {AiFillFlag, AiFillHome} from 'react-icons/ai'
@@ -14,7 +14,7 @@ function Leftside() {
       const Left = useRef();
    
      const {Person} = useContext(UserContext);
-     const {name,imgUrl } = Person;
+     const {name} = Person;
    
     
          let SIZE = '1.5rem'

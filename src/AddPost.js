@@ -3,41 +3,23 @@ import {UserContext} from './UserContext';
 import {AiFillHeart} from 'react-icons/ai';
 import {FaComment} from  'react-icons/fa';
 import axios from 'axios';
+import { PostsContext } from './Context/PostsContext'; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import './Addpost.css'
 import Loader from './Loader';
 import { createResource } from './api/PersonApi';
 import { createImageResource } from './api/ImageApi'
 
-import ShowProfileOnClick from './ShowProfileOnClick'
+
 
 
 function AddPost(){
 
-    const [POST,setPOST] = useState([]);
-    const { URL } = useContext(UserContext);
-    const [loading,setLoading] = useState(false); 
+  
     
-  useEffect(() => {
-
-     const url = URL + '/posts';
-     const getPost = async () => {
-        try{
-        
-         const { data } = await axios.get(url);
-         setPOST(data);
-        
-     }catch(error){
-      
-        return alert(error.message);
-     }
-         
-     }   
-
-     getPost(); 
-
-},[])
-
+    const [loading,setLoading] = useState(false); 
+    const {POST,setPOST} = useContext(PostsContext);  
+  
 
     
 return <> {POST.map( (obj) =>  <PostView key = {obj._id}  {...obj} /> )} </> 

@@ -1,23 +1,55 @@
-.Right{
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@300&family=Titillium+Web:wght@600&display=swap');
+.Right_content{
     margin-top:10px;
-    width:25%;
+    width: 25%;
+}
+.Right{
+    
+    width:100%;
     max-height:500px;
     overflow: scroll;
     margin-right: 5px;
-  background-color: var(--white-smoke);
+   background-color: var(--white-smoke);
+   margin-top: 10px;
+}
+.Right_content h2{
+   text-align: center; 
+   font-family: 'Lobster', cursive;
+   color: var(--text);
+   font-weight: 800;
+   text-shadow: 2px 2px #ff4081;
 }
 .loader{
     margin-inline: auto;
     margin-top: 5px;
-    height:20%;
+    height:100px;
     width:100%;
+    display: flex;
     background-color: var(--white);
     border-radius: 10px;
 }
+.right_header{
+    display: flex;
+    width: 90%;
+    margin-inline: auto;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.right_header_img{
+    height: 60px;
+    width: 60px;
+    margin-left: 15px;
+    border-radius: 50%;
+    object-fit: contain;
+    overflow: hidden;
+    border: 2px solid #ff4081;
+}
 .loader-photo{
     margin: auto;
-    width:35%;
-    height: 40%;
+    width:30%;
+    height: 50px;
     margin-top: 20px;
     margin-left:10px;
     border-radius: 10px;
@@ -42,15 +74,16 @@
     
     margin-inline: auto;
     border-radius: 10px;
-    
+    display: flex;
+    align-items: center;
     background-color: var(--white);
     margin-top: 5px;
 }
 .new h5{
     margin-top: 4px;
     margin-left: 4px;
-    font-weight: 400;
-    text-align: center;
+    font-weight: 700;
+    text-align: left;
     font-family: 'Times New Roman', Times, serif;
 }
 .new:hover{
@@ -66,7 +99,7 @@ display: flex;
     display: flex;
 }
 @media(max-width : 768px) {
- .Right{
+ .Right_content{
     height: 0;
     width: 0;
     opacity: 0;

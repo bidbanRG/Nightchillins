@@ -1,6 +1,8 @@
 import { useEffect,useState } from "react";
 import React from 'react'
 import axios from "axios";
+import {URL} from './uri';
+import owl from './owl-huh.gif';
 import './right.css'
 function Rightside() {
      let News = null;
@@ -16,17 +18,22 @@ function Rightside() {
   
    
     return (
-        (News == null) ? <div className = "Right">
+        
+        <div className = 'Right_content'>
+            <RightHeader/>
+        <div className = 'Right' >
+            {(News == null) ? <div>
              <div className="loader"> <div className="loader-photo"></div> </div>
              <div className="loader"> <div className="loader-photo"></div> </div>
              <div className="loader"> <div className="loader-photo"></div> </div>
              <div className="loader"> <div className="loader-photo"></div> </div>
              <div className="loader"> <div className="loader-photo"></div> </div>
         </div> :
-        <div className = 'Right' >
-             {News.map((obj,index)=>(
+             News.map((obj,index)=>(
                 <Articles key = {index} url = {obj.url} urlToImage = {obj.urlToImage} title = {obj.title}/> 
            ))}
+
+        </div>
         </div>
       )
 }
@@ -47,14 +54,24 @@ function Image({imgurl}){
    )
 }
 
+const RightHeader = () => {
+
+return( <div className = 'right_header'>
+            <h2> What's New </h2>
+            <div className = 'right_header_img'> 
+            <img src = {owl} height = '60px' width = '60px'/>
+            </div>
+          </div>  
+        )
+}
 
 
 function useGetNews(){
     const [Data,setData] = useState({});
-    const url = 'https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=93b229fa7bac49d3b0742bac0399e20a'       
+   
     useEffect(()=>{
         
-          axios.get(url).then(function (response) {
+          axios.get(URL + '/news').then(function (response) {
               
                setData(response.data);               
           }).catch(function (error) {
@@ -63,7 +80,7 @@ function useGetNews(){
           });
     
                    
-            },[url])
+            },[])
          return Data;
 }
 // function useGetwidth(){

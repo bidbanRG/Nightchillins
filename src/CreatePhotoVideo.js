@@ -1,17 +1,19 @@
 import React,{useContext,useState} from 'react'
-import {UserContext,UserPost} from './UserContext';
+
+import {UserContext} from './Context/UserContext';
 import {URL, uploadURL, preset} from './uri';
 import axios from 'axios';
+import { PostsContext } from './Context/PostsContext'; 
 import Loader from './Loader';
 import './divPost.css'
 import {useNavigate} from 'react-router-dom';
 function CreatePhotoVideo(){
 
 
-  
+  const {POST,setPOST} = useContext(PostsContext);
   const {Person} = useContext(UserContext);
   const { name,imgUrl } = Person;
- 
+  
   const [loading,setLoading] = useState(false);
   const [photoChoosen,setPhotoChoosen] = useState(false); 
     const onPhotoPost = async ()=>{
@@ -41,8 +43,8 @@ function CreatePhotoVideo(){
                   When:Date.now(),          
                }
               
-              await axios.post(URL + '/posts',postBody);
-
+             const response = await axios.post(URL + '/posts',postBody);
+                setPOST([response.data, ...POST]);
                setLoading(false);
                alert('photo posted');
                navigate(-1);

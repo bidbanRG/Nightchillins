@@ -1,15 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import StoryProvider from './Context/StoriesContext';
+import PostsProvider from './Context/PostsContext';
+import UserProvider from './Context/UserContext';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-     <StoryProvider>
-       <App />
-     </StoryProvider> 
+     <UserProvider>
+      <PostsProvider>
+        <StoryProvider>
+         <App />
+        </StoryProvider>
+      </PostsProvider>
+     </UserProvider> 
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -7,14 +7,14 @@ import{RiSunFoggyFill} from 'react-icons/ri';
 import {GoTriangleDown} from 'react-icons/go';
 import{GiHamburgerMenu} from 'react-icons/gi';
 import{FaFacebook,FaUserFriends} from 'react-icons/fa';
-import {UserContext} from './UserContext'
+import {UserContext} from './Context/UserContext'
 import { useRef } from 'react';
 
-function Header({Logout}) {
+function Header() {
 
   // const {isDark,setTheme} = useContext(UserContext);   
   let black = 'black';
-  
+  const {setPerson,setLogin} = useContext(UserContext);
   const Home = useRef();
   const Watch = useRef();
   const Mp = useRef();
@@ -25,6 +25,15 @@ function Header({Logout}) {
   const noti = useRef();
   const logout = useRef();
   const Width = useGetwidth();
+
+  const LogOut = () => {
+        setLogin(false);
+      localStorage.removeItem('NightchilinsName');
+      localStorage.removeItem('NightchilinsPassword');
+      window.location.reload(true);
+      setPerson(null);
+  }
+
   let Color = '#607d8b';
    const [isDark,setTheme] = useSetTheme();
    function useSetTheme(){
@@ -64,7 +73,7 @@ if(Width < 700) {
             { !isDark && <MdNightsStay className = 'phone-icons' onClick = {setTheme} />}
             {  isDark && <RiSunFoggyFill className = 'phone-icons' onClick = {setTheme} />}
                 
-              <BsPower className = 'phone-icons' onClick = {Logout} />
+              <BsPower className = 'phone-icons' onClick = {LogOut} />
           </div>
        </div>
      
@@ -94,7 +103,7 @@ ref = {theme} className = "icons2-icon" onMouseLeave = {()=>{theme.current.class
                 </div>
                   
                    <div ref = {noti} className = "icons2-icon" className = "icons2-icon" onMouseLeave = {()=>{noti.current.className = "icons2-icon"}} onMouseEnter = {()=>{noti.current.className += " " + "icons2-icon-noti"}}>  <BsFillBellFill color = {black}/> </div> 
-                   <div ref = {logout} onClick = {()=>{Logout()}} className = "icons2-icon" className = "icons2-icon" onMouseLeave = {()=>{logout.current.className = "icons2-icon"}} onMouseEnter = {()=>{logout.current.className += " " + "icons2-icon-logout"}}>  <BsPower color = {black}/> </div>
+                   <div ref = {logout} onClick = {LogOut} className = "icons2-icon" className = "icons2-icon" onMouseLeave = {()=>{logout.current.className = "icons2-icon"}} onMouseEnter = {()=>{logout.current.className += " " + "icons2-icon-logout"}}>  <BsPower color = {black}/> </div>
             </div>
         </div>
     </div>

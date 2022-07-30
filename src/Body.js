@@ -1,14 +1,14 @@
 import React,{useState,useEffect,useContext,Suspense} from 'react'
-import {getDownloadURL,ref,uploadBytes} from "firebase/storage";
+import { UserContext } from './Context/UserContext';
 import {BrowserRouter as Router,Routes,Route,useNavigate} from 'react-router-dom';
 import './Addpost.css'
-import {db} from './firebase';
-import {collection,getDocs,addDoc,updateDoc,doc} from 'firebase/firestore';
-import {storage} from './firebase'
+import axios from 'axios';
+import {URL,uploadURL,preset} from './uri';
 import './body.css'
 import './App.css'
 import Stories from './Stories'
 import Reels from './Reels';
+import News from './News';
 import CreatePhotoVideo from './CreatePhotoVideo'
 import ShowProfileOnClick from './ShowProfileOnClick'
 import {RiLiveFill} from 'react-icons/ri';
@@ -23,9 +23,9 @@ import AddStories from './AddStories';
 import AddPost from './AddPost'
 import PhotoVideo from './PhotoVideo'
 import Profile from './Profile';
+import Loader from './Loader';
 
-import {app} from './firebase';
-import {UserContext,UserPost} from './UserContext';
+import {UserPost} from './UserContext';
 function Body() {
 
    
@@ -87,12 +87,14 @@ const Feed = () => {
               <>   
                    <Mind/> 
                    <Stories/>
+                   <News/>
                    
               </> 
                : 
               <>
                  <Stories/> 
                  <Mind/> 
+
               </>
            }
 
@@ -134,7 +136,7 @@ function Mind(){
         
           <div className = "top">
               <Suspense fallback = {<Preview/>}>
-                <Profile/>
+                 <ProfilePicture/>
               </Suspense>  
                 <ShareViews/>
           </div>
@@ -150,6 +152,51 @@ function Mind(){
    );
     
 }
+
+const ProfilePicture = () => {
+    
+    const [pic,setPic] = useState(null);
+    const { Person,setPerson } = useContext(UserContext);
+    const [loading,setLoading] = useState(false);
+    
+
+    const ProfilePictureChange = async (e) => {
+         
+         setPic(e.target.files[0]);
+         const Data = new FormData();
+         Data.append('file',pic);
+         Data.append('upload_preset',preset); 
+
+         try{
+            setLoading(true);
+            const { data } = await axios.post(uploadURL,Data);
+            const { url } = data;
+             if(!url) return alert('Something went wrong');
+              
+             await axios.post(URL + '/users/changeprofile',{
+                 _id:Person._id,
+                 newimgUrl:url
+             }) 
+            setPerson({...Person,imgUrl:url});
+             setLoading(false);
+         }catch(err) {
+             setLoading(false);
+            return alert(err.message);}
+         
+
+
+    }
+
+ if(loading) return <Loader/> 
+    return(
+        <Profile>
+            <div className = "inp"> 
+                 <input type = "file" onChange = {ProfilePictureChange}/>
+            </div>
+        </Profile>
+    )
+}
+
  
 const ShareViews = () => {
      let navigate = useNavigate();

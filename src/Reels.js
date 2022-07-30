@@ -2,7 +2,8 @@ import React,{useRef,useEffect,useContext,useState} from 'react';
 import axios from 'axios';
 import Loader from './Loader';
 import { URL ,preset, uploadVideoURL} from './uri';
-import {UserContext,UserPost} from './UserContext'
+import {UserPost} from './UserContext'
+import {UserContext} from './Context/UserContext';
 import { useInView,InView } from 'react-intersection-observer';
 import './reels.css'
 import {StoryContext} from './Context/StoriesContext';
@@ -52,7 +53,7 @@ function Reels({storynumber}){
             setLoading(true);
             const { data } = await axios.post(uploadVideoURL,Data);
             const { url } = data;
-            console.log(url);
+           
             if(!url){
                setLoading(false);
              return alert('Something went wrong');
@@ -64,11 +65,11 @@ function Reels({storynumber}){
                 Userid:Person._id,
                 When:Date.now()
             }
-            console.log(UploadReel);
+           
             const response = await axios.post(URL + '/stories',UploadReel); 
+            setREELS([response.data, ...REELS]);
+               
                setLoading(false);
-           console.log(response.data);
-           setREELS([response.data, ...REELS]);
            navigate(-1);
          }catch(error){
             setLoading(false);
@@ -198,7 +199,7 @@ function Video(obj){
   
 	const { Userid,Description, PostUrl,Close} = obj;
     const [User,setUser] = useState(false);
-	const videoRef = useRef();
+ 	const videoRef = useRef();
     const handleReels = (e)=>{
     	
       if(e.target.paused) e.target.play();
@@ -219,6 +220,9 @@ useEffect(()=>{
           
         	if(inView){
                 videoRef.current.play();
+                videoRef.current.onended = () => {
+                    videoRef.current.play();
+                }
 
             }
              else 

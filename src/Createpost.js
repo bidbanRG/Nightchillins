@@ -2,7 +2,8 @@ import React, {useState,useRef,useContext} from 'react'
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import axios from 'axios';
 import {URL} from './uri';
-import {UserContext,UserPost} from './UserContext'
+import {UserContext} from './Context/UserContext'
+import { PostsContext } from './Context/PostsContext'; 
 import "./post.css"
 import Loader from './Loader'
 import {useNavigate} from 'react-router-dom';
@@ -12,6 +13,7 @@ function Createpost() {
    const {Person} = useContext(UserContext);
 const { name,imgUrl } = Person;
 const [loading,setLoading] = useState(false);
+  const {POST,setPOST} = useContext(PostsContext);
 const text = useRef("");
 let navigate = useNavigate();
  
@@ -28,11 +30,11 @@ let navigate = useNavigate();
        }
      
       setLoading(true);
-      await axios.post(URL + '/posts',postBody);
-      setTimeout(()=>{
-         setLoading(false);
+      const response = await axios.post(URL + '/posts',postBody);
+      setPOST([response.data, ...POST]);
+      setLoading(false);
          navigate(-1)
-      },[300]);
+      
       
       }catch(error){
         setLoading(false);
