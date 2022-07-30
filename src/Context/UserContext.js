@@ -25,7 +25,7 @@ const UserProvider = ({children}) => {
           setLoading(true);
          const url = URL + '/users/login'; 
         const { data } = await axios.post(url,{name,password,id});
-        
+        if(data.length === 0) return;
          setPerson(data[0]);
          
          setLoading(false);
