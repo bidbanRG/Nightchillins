@@ -21,12 +21,13 @@ const UserProvider = ({children}) => {
          const name =  localStorage.getItem(`NightchilinsName`);
          const password = localStorage.getItem(`NightchilinsPassword`);
          const id = localStorage.getItem(`NightchilinsId`);
-         if(!name && !password && !id) return;
+         if(!name && !password) return;
           setLoading(true);
          const url = URL + '/users/login'; 
         const { data } = await axios.post(url,{name,password,id});
         
          setPerson(data[0]);
+         console.log(Person);
          setLogin(true);
          setLoading(false);
         }catch(error){

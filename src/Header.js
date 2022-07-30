@@ -14,7 +14,7 @@ function Header() {
 
   // const {isDark,setTheme} = useContext(UserContext);   
   let black = 'black';
-  const {setPerson,setLogin} = useContext(UserContext);
+  const {setLogin} = useContext(UserContext);
   const Home = useRef();
   const Watch = useRef();
   const Mp = useRef();
@@ -31,7 +31,7 @@ function Header() {
       localStorage.removeItem('NightchilinsName');
       localStorage.removeItem('NightchilinsPassword');
       window.location.reload(true);
-      setPerson(null);
+      
   }
 
   let Color = '#607d8b';
