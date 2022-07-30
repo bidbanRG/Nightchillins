@@ -121,8 +121,8 @@ const SignIn = async () => {
  
       const url = `${URL}/users`;
       const { data } = await axios.post(url,{name:name.current.value,password:password.current.value,imgUrl:ImgUrl});
-      setPerson(data[0]);
-      console.log(data[0]._id);
+      console.log(data);
+      setPerson(data);
        
       localStorage.setItem(`NightchilinsId`, data._id);
       localStorage.setItem(`NightchilinsName`, data.name);
