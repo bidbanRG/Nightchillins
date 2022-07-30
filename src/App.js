@@ -84,7 +84,7 @@ const LogIn = async () => {
    try{ 
      const id =  localStorage.getItem(`NightchilinsId`);
      if(id === null || id === undefined) return alert('No User Found');
-      console.log(id);
+     
       name.current.value = name.current.value.trim();
       password.current.value = password.current.value.trim();
     
