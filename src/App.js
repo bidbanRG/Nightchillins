@@ -99,7 +99,7 @@ const LogIn = async () => {
     
       localStorage.setItem(`NightchilinsName`, data[0].name);
       localStorage.setItem(`NightchilinsPassword`, data[0].password);
-
+      localStorage.setItem('NightchilinsImgUrl',data[0].imgUrl);
      setPerson(data[0]);    
 
      setLogin(true);
@@ -127,7 +127,7 @@ const SignIn = async () => {
       localStorage.setItem(`NightchilinsId`, data._id);
       localStorage.setItem(`NightchilinsName`, data.name);
       localStorage.setItem(`NightchilinsPassword`, data.password);
-      
+      localStorage.setItem('NightchilinsImgUrl',data.imgUrl);
       setLogin(true);
 
   }catch(error){
@@ -149,7 +149,14 @@ const SignIn = async () => {
              </div>  
             </div> 
              
-            <div className = 'spin_in' style = {{height:"70px",width:"70px",marginInline:'auto'}}   > </div>
+            <div className = 'spin_in' 
+              style = {{
+                    height:"70px",
+                    width:"70px",
+                    marginInline:'auto',
+                    borderRadius:'50%',
+                    backgroundImage:`url('owl.jpg')`
+                }}> </div>
              <input type = 'text' autoFocus  placeholder = "Full Name..." ref = {name}/>
                 
              <input type = 'text' placeholder = "Password..." ref = {password}  />

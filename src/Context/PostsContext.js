@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
-import {URL} from '../uri';
+import {URL, uploadURL, preset} from '../uri';
 
 
 export const PostsContext = React.createContext();
@@ -9,7 +9,10 @@ export const PostsContext = React.createContext();
 const PostsProvider = ({children}) => {
    
      const [POST,setPOST] = useState([]);
+ 
      
+
+
      useEffect(() => {
 
      const url = URL + '/posts';
@@ -30,6 +33,10 @@ const PostsProvider = ({children}) => {
 },[])
 
 
+  
+
+
+
     return(
        <PostsContext.Provider value = {{POST,setPOST}}>
           {children}
@@ -38,4 +45,6 @@ const PostsProvider = ({children}) => {
 
 
 }
+
+
 export default PostsProvider;

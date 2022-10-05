@@ -1,58 +1,58 @@
 import React,{useContext,useState} from 'react'
 
 import {UserContext} from './Context/UserContext';
-import {URL, uploadURL, preset} from './uri';
-import axios from 'axios';
 import { PostsContext } from './Context/PostsContext'; 
-import Loader from './Loader';
+
 import './divPost.css'
 import {useNavigate} from 'react-router-dom';
+import { AddPostContext } from './Context/AddPostContext';
+import { preset, uploadURL } from './uri';
+import axios from 'axios';
 function CreatePhotoVideo(){
 
 
   const {POST,setPOST} = useContext(PostsContext);
+  const {setImage,setPostBody,PostBody} = useContext(AddPostContext);
   const {Person} = useContext(UserContext);
   const { name,imgUrl } = Person;
   
   const [loading,setLoading] = useState(false);
-  const [photoChoosen,setPhotoChoosen] = useState(false); 
+  const [photoChoosen,setPhotoChoosen] = useState(false);
+
     const onPhotoPost = async ()=>{
            
         if(!photoChoosen) return alert('No Photo Selected');
              
-            const Data = new FormData();
-            Data.append('file',photoChoosen);
-            Data.append('upload_preset',preset);             
-             
-     
-           try{
-              
-              setLoading(true);
-             const { data } = await axios.post(uploadURL,Data);
-             const { url } = data;                    
+                       
                
-               if(!url){
-                 setLoading(false);
-                 return alert('something went wrong');
-               } 
-               
-               const postBody =  {
-                  PostUrl:url,
+
+        const Data = new FormData();
+         Data.append('file',photoChoosen);
+         Data.append('upload_preset',preset);
+           
+              const postBody =  {
                   Type:'image',
                   Userid:Person._id,
                   When:Date.now(),          
-               }
-              
-             const response = await axios.post(URL + '/posts',postBody);
-                setPOST([response.data, ...POST]);
-               setLoading(false);
-               alert('photo posted');
-               navigate(-1);
-           
-           }catch(error){
-              setLoading(false);
-            return alert()
+               }      
+
+
+         try{   
+              setLoading(true);
+            const { data } = await axios.post(uploadURL,Data);
+
+              setPostBody({...postBody,PostUrl:data.url});
+             setLoading(false); 
+              navigate(-1);
+            }catch(err){
+             setPostBody(null);
+         
+             return alert('Something Went Wrong');
           }
+               
+              
+              
+        
      }
     
     const onPhotoSelection = (e)=> {
@@ -70,6 +70,9 @@ function CreatePhotoVideo(){
             }
           
          setPhotoChoosen(file);
+        
+       
+          
 
    }
  
@@ -77,11 +80,11 @@ function CreatePhotoVideo(){
 
  let navigate = useNavigate();
 
-  if(loading) return <Loader/>
+
    
    return (
 
-     <div className = "divPost"> 
+     <div className = "divPost" style = { PostBody && {opacity:'0'}}> 
         <div className = "divPostsize">
            <div className = "divPosthead"> 
              <h2> Add Photos </h2>
@@ -109,7 +112,11 @@ function CreatePhotoVideo(){
                
               </div> 
            </div>
-                <button className = "post-btn1" onClick = {onPhotoPost}> ADD </button> 
+                <button className = "post-btn1" onClick = {onPhotoPost}> 
+                   {
+                       loading ? <Loader/> : "Post"
+                   }
+                </button> 
           
 
         </div>
@@ -119,5 +126,12 @@ function CreatePhotoVideo(){
 
 }
 
+function Loader(){
+    return(
+       
+         <div className = "spin_in"><div className = 'spin'> </div> </div>
+        
+    )
+}
 
 export default CreatePhotoVideo;

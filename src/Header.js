@@ -30,7 +30,7 @@ function Header() {
         setLogin(false);
       localStorage.removeItem('NightchilinsName');
       localStorage.removeItem('NightchilinsPassword');
-      window.location.reload(true);
+     
       
   }
 

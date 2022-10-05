@@ -12,6 +12,17 @@
     
     
 }
+.post1{
+    position:absolute;
+    top:2.9rem;
+    left:0;
+    right:0;
+    bottom: 0;
+    background-color: rgb(0,0,0,0.2);
+    z-index:-1;
+      display: flex;
+      justify-content: center;
+}
 .post-size{
 
     margin-top: 20px;
@@ -100,6 +111,7 @@
      border-radius: 8px;
      border:none;
      background-color: #ff4081;
+     font-weight: 900;
  }
  .emoji{
      width:0px;

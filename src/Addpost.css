@@ -7,7 +7,22 @@
 	margin-inline: auto;
 	margin-top: 10px;
 }
-.addpost header{
+.post_loader{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+   text-align: center;
+   color: #ff4081;
+   z-index: 10;
+}
+.post_bar{
+	height: 14px;
+	width: 80%;
+	margin-inline: auto;
+	border-radius: 7px;
+	background-color: grey;
+}
+.addpost  header{
   
   
 
@@ -15,7 +30,7 @@
   display: flex;
   height: 60px;
 }
-.addpost p{
+.addpost  p{
 	font-size: 20px;
 	word-wrap: break-word;
 	margin-top: 10px;
@@ -23,7 +38,7 @@
 	margin-right: 10px;
 	color:  var(--black);
 }
-.addpost section{
+.addpost  section{
 	height: 40px;
 	width: 100%;
 	display: flex;
@@ -126,6 +141,7 @@ border-radius: 50%;
 
 		color: black;
 }
+
 @media(max-width : 768px){
    .heart:hover{
       transform: scale(1.0);

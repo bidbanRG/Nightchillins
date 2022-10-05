@@ -1,9 +1,10 @@
-import React,{useContext,useState,useEffect,Suspense} from 'react';
+import React,{useContext,useState,useEffect,Suspense, useRef} from 'react';
 import {UserContext} from './UserContext';
 import {AiFillHeart} from 'react-icons/ai';
 import {FaComment} from  'react-icons/fa';
 import axios from 'axios';
-import { PostsContext } from './Context/PostsContext'; 
+import { PostsContext } from './Context/PostsContext';
+import { AddPostContext} from './Context/AddPostContext' 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import './Addpost.css'
 import Loader from './Loader';
@@ -17,12 +18,14 @@ function AddPost(){
 
   
     
-    const [loading,setLoading] = useState(false); 
-    const {POST,setPOST} = useContext(PostsContext);  
   
-
+    const {POST,setPOST} = useContext(PostsContext);  
+      
+   
     
-return <> {POST.map( (obj) =>  <PostView key = {obj._id}  {...obj} /> )} </> 
+return <> 
+        <PostLoader/> 
+    {POST.map( (obj) =>  <PostView key = {obj._id}  {...obj} /> )} </> 
        
 }
 
@@ -30,10 +33,11 @@ return <> {POST.map( (obj) =>  <PostView key = {obj._id}  {...obj} /> )} </>
 
 const PostView = (obj) => {
   
-  // console.log(longAgo(obj.When));
- 
-    
-     const personResource = createResource();
+  
+  const personResource = createResource();
+
+
+
 
    return (
          <div className = 'addpost' > 
@@ -65,7 +69,7 @@ const Profile = ({personResource,id,when}) => {
  
   const person = personResource.person.read({_id:id});
  
-  const { name, imgUrl } = person;
+   const { name, imgUrl } = person;
    const imageResource = createImageResource();
    
    
@@ -109,6 +113,62 @@ const BottamTab = () => {
 
 }
 
+
+function PostLoader(){
+
+ 
+  const imageResource = createImageResource();
+  const name = localStorage.getItem('NightchilinsName');
+  const imgUrl = localStorage.getItem('NightchilinsImgUrl');
+ const { progress, PostBody } = useContext( AddPostContext );
+ 
+ 
+ 
+
+    return(
+        <>
+        { PostBody ?
+            <div className = 'addpost' style = {{opacity:'0.5',position:'relative'}} > 
+                 <Spin value = {progress.value}/>
+          <header> 
+        <Suspense fallback = {<img src = {imgUrl} className = "who preview"/> }>
+          <Image imageResource = {imageResource} src = {imgUrl} className = "who"/>
+        </Suspense>
+         <div className = "who_details">
+            <h4> {name} </h4>
+         <h5 className = "date">  { "0 sec ago" } </h5>
+       </div>
+     </header>  
+            
+        
+            <img  src = {PostBody.PostUrl} alt = 'post photo' width = '100%' />
+                                
+        
+             
+    <BottamTab/>
+        
+       </div> : <div></div>
+       }
+      </>
+   )
+}
+
+function Spin({value}){
+    return(
+       <div className = 'post_loader'>
+           <h2> {value}% </h2>
+            <div className = 'post_bar'>
+               <div style = {{
+                  height:'100%',
+                  width:`${value}%`,
+                  borderRadius:'7px',
+                  backgroundColor:'#ff4081'
+               }}>
+               </div> 
+           </div>
+       </div> 
+    )
+}
 
 //calculating time of posts
 

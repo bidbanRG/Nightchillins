@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import StoryProvider from './Context/StoriesContext';
 import PostsProvider from './Context/PostsContext';
 import UserProvider from './Context/UserContext';
+import AddPostProvider from './Context/AddPostContext';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -12,7 +13,9 @@ ReactDOM.render(
      <UserProvider>
       <PostsProvider>
         <StoryProvider>
-         <App />
+         <AddPostProvider>
+          <App />
+         </AddPostProvider> 
         </StoryProvider>
       </PostsProvider>
      </UserProvider> 

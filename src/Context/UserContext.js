@@ -20,19 +20,20 @@ const UserProvider = ({children}) => {
 
          const name =  localStorage.getItem(`NightchilinsName`);
          const password = localStorage.getItem(`NightchilinsPassword`);
-         const id = localStorage.getItem(`NightchilinsId`);
-         if(!name && !password) return;
-          setLoading(true);
-         const url = URL + '/users/login'; 
-        const { data } = await axios.post(url,{name,password,id});
-        if(data.length === 0){
-          setLoading(false);
-          return;
-        }
+         const _id = localStorage.getItem(`NightchilinsId`);
+         const imgUrl = localStorage.getItem('NightchilinsImgUrl')
+         if(!name || !password  || !imgUrl ) return;
+        
+        //  const url = URL + '/users/login'; 
+        // const { data } = await axios.post(url,{name,password,id});
+        // if(data.length === 0){
+        //   setLoading(false);
+        //   return;
+        // }
          
-         setPerson(data[0]);
+         setPerson({_id,name,password,imgUrl});
          
-         setLoading(false);
+        
          setLogin(true);
         }catch(error){
             return alert(error.message);
