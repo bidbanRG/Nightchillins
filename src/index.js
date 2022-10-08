@@ -4,6 +4,7 @@ import StoryProvider from './Context/StoriesContext';
 import PostsProvider from './Context/PostsContext';
 import UserProvider from './Context/UserContext';
 import AddPostProvider from './Context/AddPostContext';
+import AddPostProvider2 from './Context/AddPostContext2';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -14,7 +15,9 @@ ReactDOM.render(
       <PostsProvider>
         <StoryProvider>
          <AddPostProvider>
-          <App />
+          <AddPostProvider2>
+            <App />
+          </AddPostProvider2> 
          </AddPostProvider> 
         </StoryProvider>
       </PostsProvider>

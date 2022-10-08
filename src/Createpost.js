@@ -2,7 +2,8 @@ import React, {useState,useRef,useContext} from 'react'
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import axios from 'axios';
 import {URL} from './uri';
-import {UserContext} from './Context/UserContext'
+import { AddPostContext2 } from './Context/AddPostContext2';
+import { UserContext } from './Context/UserContext'
 import { PostsContext } from './Context/PostsContext'; 
 import "./post.css"
 
@@ -11,16 +12,17 @@ function Createpost() {
     
     
    const {Person} = useContext(UserContext);
-const { name,imgUrl } = Person;
-
-  const {POST,setPOST} = useContext(PostsContext);
+   const { name,imgUrl } = Person;
    const [loading,setLoading] = useState(false);
+   const {POST,setPOST} = useContext(PostsContext);
+   const { setPostBody } = useContext(AddPostContext2);
+  
 const text = useRef("");
 let navigate = useNavigate();
- 
+   
  const sendPost = async ()=>{
     if(text.current.value.length === 0) {return;}
-    
+        
        const postBody =  {
           Text:text.current.value,
           Type:'text',
@@ -28,20 +30,10 @@ let navigate = useNavigate();
           When:Date.now(),          
        }; 
          
-           try{
-           
-           setLoading(true);
-          const response = await axios.post(URL + '/posts',postBody);
-          setPOST([postBody,...POST]);
-          setLoading(false);
-          
-      }catch(err){
-          setLoading(false);
-          return alert('Something Went Wrong');
-        }
-     
-
-          navigate(-1);
+         
+        setPostBody(postBody);
+        
+        navigate(-1);
    
      }
 
@@ -64,9 +56,7 @@ let navigate = useNavigate();
                 
                  />
                  <button className = "post-btn" onClick = {sendPost}>  
-                   {
-                       loading ? <Loader/> : "Post"
-                   }
+                     Post
                  </button>
             </div>
              

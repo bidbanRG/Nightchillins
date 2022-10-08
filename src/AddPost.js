@@ -10,6 +10,7 @@ import './Addpost.css'
 import Loader from './Loader';
 import { createResource } from './api/PersonApi';
 import { createImageResource } from './api/ImageApi'
+import { AddPostContext2 } from './Context/AddPostContext2';
 
 
 
@@ -25,7 +26,9 @@ function AddPost(){
     
 return <> 
         <PostLoader/> 
-    {POST.map( (obj) =>  <PostView key = {obj._id}  {...obj} /> )} </> 
+        <PostLoader2/>
+    {POST.map( (obj) =>  <PostView key = {obj._id}  {...obj} /> )} 
+    </> 
        
 }
 
@@ -121,14 +124,20 @@ function PostLoader(){
   const name = localStorage.getItem('NightchilinsName');
   const imgUrl = localStorage.getItem('NightchilinsImgUrl');
  const { progress, PostBody } = useContext( AddPostContext );
+ const loaderBody = useRef();
  
- 
- 
+ useEffect(() => {
+   
+   if(PostBody !== null){
+     loaderBody.current.scrollIntoView({behavior:'smooth'});
+   }
+
+ },[PostBody])
 
     return(
         <>
         { PostBody ?
-            <div className = 'addpost' style = {{opacity:'0.5',position:'relative'}} > 
+            <div className = 'addpost' style = {{opacity:'0.5',position:'relative'}} ref = {loaderBody}> 
                  <Spin value = {progress.value}/>
           <header> 
         <Suspense fallback = {<img src = {imgUrl} className = "who preview"/> }>
@@ -152,6 +161,52 @@ function PostLoader(){
       </>
    )
 }
+
+
+function PostLoader2() {
+  
+
+   const imageResource = createImageResource();
+  const name = localStorage.getItem('NightchilinsName');
+  const imgUrl = localStorage.getItem('NightchilinsImgUrl');
+  const { PostBody, progress } = useContext(AddPostContext2);
+   const loaderBody = useRef();
+
+  
+useEffect(() => {
+   
+   if(PostBody !== null){
+     loaderBody.current.scrollIntoView({behavior:'smooth'});
+   }
+
+ },[PostBody])
+   
+   return <>
+       {
+          PostBody ? 
+           <div className = 'addpost' style = {{opacity:'0.5',position:'relative'}} ref = {loaderBody}> 
+                 <Spin value = {progress}/>
+          <header> 
+        <Suspense fallback = {<img src = {imgUrl} className = "who preview"/> }>
+          <Image imageResource = {imageResource} src = {imgUrl} className = "who"/>
+        </Suspense>
+         <div className = "who_details">
+            <h4> {name} </h4>
+         <h5 className = "date">  { "0 sec ago" } </h5>
+       </div>
+     </header>  
+            
+         <p>  {PostBody.Text} </p>
+                                
+   <BottamTab/>
+        
+       </div> : <div></div>
+       }
+   </>
+
+
+}
+
 
 function Spin({value}){
     return(
