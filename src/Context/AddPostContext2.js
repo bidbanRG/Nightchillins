@@ -23,8 +23,8 @@ export default function AddPostProvider2({children}){
          try{
             
           const response = await axios.post(URL + '/posts',PostBody,config);
-          console.log(response);
-          setPOST([PostBody,...POST]);
+         
+          setPOST([response.data,...POST]);
          }catch(err){
           return alert(err.message);
        }
@@ -33,15 +33,10 @@ export default function AddPostProvider2({children}){
 
     }
 
- useEffect(() => {
-   
-    if(PostBody !== null) 
-      {AddPost();}
-
-},[PostBody]);
 
 
-     return <AddPostContext2.Provider value={{PostBody,setPostBody,progress}}>
+
+     return <AddPostContext2.Provider value={{PostBody,setPostBody,progress, AddPost}}>
          {children}
        </AddPostContext2.Provider>
      

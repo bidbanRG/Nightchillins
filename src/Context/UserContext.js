@@ -22,14 +22,9 @@ const UserProvider = ({children}) => {
          const password = localStorage.getItem(`NightchilinsPassword`);
          const _id = localStorage.getItem(`NightchilinsId`);
          const imgUrl = localStorage.getItem('NightchilinsImgUrl')
-         if(!name || !password  || !imgUrl ) return;
+         if(!name || !password  || !imgUrl || !_id) return;
         
-        //  const url = URL + '/users/login'; 
-        // const { data } = await axios.post(url,{name,password,id});
-        // if(data.length === 0){
-        //   setLoading(false);
-        //   return;
-        // }
+        
          
          setPerson({_id,name,password,imgUrl});
          

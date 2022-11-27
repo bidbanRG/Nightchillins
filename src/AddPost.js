@@ -169,14 +169,16 @@ function PostLoader2() {
    const imageResource = createImageResource();
   const name = localStorage.getItem('NightchilinsName');
   const imgUrl = localStorage.getItem('NightchilinsImgUrl');
-  const { PostBody, progress } = useContext(AddPostContext2);
-   const loaderBody = useRef();
+  const { PostBody, progress, AddPost } = useContext(AddPostContext2);
+   const loaderBody = useRef(null);
 
   
 useEffect(() => {
    
    if(PostBody !== null){
-     loaderBody.current.scrollIntoView({behavior:'smooth'});
+     loaderBody.current.scrollIntoView({behavior: "smooth"});
+       console.log(loaderBody.current);
+      AddPost();
    }
 
  },[PostBody])
