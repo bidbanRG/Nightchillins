@@ -1,7 +1,7 @@
 
 import { URL } from '../uri';
 import axios from 'axios';
-
+const mp = new Map();
 const wrapPromise = () => {
 
 const promise = (personId) => {
@@ -26,12 +26,17 @@ const promise = (personId) => {
 }
   return {
     read(personId) {
+       
+       if(mp.has(personId._id))
+          return mp.get(personId._id);
+
       if (status === "pending") {
         throw suspender(personId);
       } else if (status === "error") {
         throw result;
       }
-
+       
+      mp.set(personId._id,result); 
       return result;
     }
   };
