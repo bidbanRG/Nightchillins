@@ -1,31 +1,35 @@
 import React,{useState,useEffect,useContext,Suspense} from 'react'
 import { UserContext } from './Context/UserContext';
-import {BrowserRouter as Router,Routes,Route,useNavigate} from 'react-router-dom';
+import {Routes,Route,useNavigate} from 'react-router-dom';
 import './Addpost.css'
 import axios from 'axios';
 import {URL,uploadURL,preset} from './uri';
 import './body.css'
 import './App.css'
 import Stories from './Stories'
-import Reels from './Reels';
 import News from './News';
-import CreatePhotoVideo from './CreatePhotoVideo'
-import ShowProfileOnClick from './ShowProfileOnClick'
 import {RiLiveFill} from 'react-icons/ri';
 import {FaPhotoVideo} from 'react-icons/fa';
-import {CgSmileMouthOpen} from 'react-icons/cg';
+import {UserPost} from './UserContext';
 import {MdVideoLibrary} from 'react-icons/md';
-import {MdVideoCall} from 'react-icons/md';
-import Createpost from './Createpost';
+
+
 import Rightside from './Rightside';
 import Leftside from './Leftside';
-import AddStories from './AddStories';
+
 import AddPost from './AddPost'
-import PhotoVideo from './PhotoVideo'
+
 import Profile from './Profile';
 import Loader from './Loader';
 
-import {UserPost} from './UserContext';
+const CreatePhotoVideo = React.lazy(() => import('./CreatePhotoVideo'));
+const Createpost = React.lazy(() => import('./Createpost')); 
+const Reels =  React.lazy(() => import('./Reels'));
+
+
+
+
+
 function Body() {
 
    
@@ -128,9 +132,26 @@ function Mind(){
         <div className = "Mind">
             
             <Routes>
-             <Route path = '/post' element = {<Createpost/>}/>
-             <Route path = '/post-photo' element = {<CreatePhotoVideo/>}/>
-             <Route path = '/reels' element = {<Reels storynumber = {storynumber}/>}/>
+             
+             <Route path = '/post' element = {<Suspense 
+                    fallback = {null}>
+                <Createpost/>
+
+                </Suspense>}
+                />
+             
+             <Route path = '/post-photo' element = {<Suspense 
+                    fallback = {null}>
+                <CreatePhotoVideo/>
+
+                </Suspense>}/>
+             
+             <Route path = '/reels' element = {<Suspense 
+                    fallback = {null}>
+                <Reels storynumber = {storynumber}/>
+
+                </Suspense>}/>
+           
            </Routes> 
 
         
