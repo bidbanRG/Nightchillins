@@ -1,3 +1,5 @@
+Social media web app using MERN technology, with feature like adding short video,photos and posts.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
